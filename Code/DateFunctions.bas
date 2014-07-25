@@ -1,4 +1,4 @@
-Attribute VB_Name = "Date_Functions"
+Attribute VB_Name = "DateFunctions"
 Option Explicit
 '=============================================================
 '

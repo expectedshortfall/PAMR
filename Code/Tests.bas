@@ -79,7 +79,7 @@ Sub TestMarketStateProvider()
 End Sub
 
 
-Sub TestZGitHelper()
+Sub TestZGitHelperExport()
     Dim helper As zGitHelper: Set helper = New zGitHelper
     Dim destPath As String
     
@@ -87,5 +87,12 @@ Sub TestZGitHelper()
     
 End Sub
 
+Sub TestZGitHelperImport()
+    Dim helper As zGitHelper: Set helper = New zGitHelper
+    Dim destPath As String
+    
+    helper.ImportModules
+    
+End Sub
 
 
