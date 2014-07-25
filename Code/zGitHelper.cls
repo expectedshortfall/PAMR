@@ -59,63 +59,43 @@ Public Sub ExportModules()
 End Sub
 
 Public Sub ImportModules()
-    Dim wkbTarget As Excel.Workbook
+    
     Dim objFSO As Scripting.FileSystemObject
     Dim objFile As Scripting.File
-    Dim szTargetWorkbook As String
-    Dim szImportPath As String
-    Dim fileName As String
+    Dim importPath As String
     Dim curCommponents As VBIDE.VBComponents
-
-    If ActiveWorkbook.Name = ThisWorkbook.Name Then
-        MsgBox "Select another destination workbook" & _
-        "Not possible to import in this workbook "
-        Exit Sub
-    End If
-
-    'Get the path to the folder with modules
-    If GetRepoPath = "Error" Then
+    
+    If Not Me.GetRepoPath(importPath) Then
         MsgBox "Import Folder not exist"
         Exit Sub
     End If
-
-    ''' NOTE: This workbook must be open in Excel.
-    szTargetWorkbook = ActiveWorkbook.Name
-    Set wkbTarget = Application.Workbooks(szTargetWorkbook)
     
-    If wkbTarget.VBProject.Protection = 1 Then
-    MsgBox "The VBA in this workbook is protected," & _
+    If ThisWorkbook.VBProject.Protection = 1 Then
+        MsgBox "The VBA in this workbook is protected," & _
         "not possible to Import the code"
-    Exit Sub
+        Exit Sub
     End If
-
-    ''' NOTE: Path where the code modules are located.
-    szImportPath = GetRepoPath & "\"
         
     Set objFSO = New Scripting.FileSystemObject
-    If objFSO.GetFolder(szImportPath).Files.Count = 0 Then
+    If objFSO.GetFolder(importPath).Files.Count = 0 Then
        MsgBox "There are no files to import"
        Exit Sub
     End If
-
-    'Delete all modules/Userforms from the ActiveWorkbook
+    
     Call SetupForLoading
 
-    Set curCommponents = wkbTarget.VBProject.VBComponents
+    Set curCommponents = ThisWorkbook.VBProject.VBComponents
     
-    ''' Import all the code modules in the specified path
-    ''' to the ActiveWorkbook.
-    For Each objFile In objFSO.GetFolder(szImportPath).Files
-    
+    For Each objFile In objFSO.GetFolder(importPath).Files
         If (objFSO.GetExtensionName(objFile.Name) = "cls") Or _
             (objFSO.GetExtensionName(objFile.Name) = "frm") Or _
             (objFSO.GetExtensionName(objFile.Name) = "bas") Then
             curCommponents.Import objFile.Path
         End If
-        
     Next objFile
     
-    MsgBox "Import is ready"
+    Debug.Print "Import is ready"
+
 End Sub
 
 Function GetRepoPath(ByRef exportPath As String) As Boolean
