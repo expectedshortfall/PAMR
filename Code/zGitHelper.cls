@@ -23,7 +23,7 @@ Public Sub ExportModules()
     Dim exportPath As String
     Dim curCommponent As VBIDE.VBComponent
     
-    If Not Me.GetRepoPath(exportPath) Then
+    If Not Me.RepoPathExists(exportPath) Then
         MsgBox "Export Folder not exist"
         Exit Sub
     End If
@@ -33,25 +33,29 @@ Public Sub ExportModules()
     On Error GoTo 0
     
     For Each curCommponent In ThisWorkbook.VBProject.VBComponents
-        
-        export = True
-        fileName = curCommponent.Name
-
-        Select Case curCommponent.Type
-            Case vbext_ct_ClassModule
-                fileName = fileName & ".cls"
-            Case vbext_ct_MSForm
-                fileName = fileName & ".frm"
-            Case vbext_ct_StdModule
-                fileName = fileName & ".bas"
-            Case vbext_ct_Document
-                export = False
-        End Select
-        
-        If export Then
-            curCommponent.export exportPath & fileName
-        End If
-   
+        If curCommponent.Type = vbext_ct_Document Or curCommponent.Name = thisClassModuleName Then
+            'Thisworkbook or worksheet module or this Module
+            'We do nothing
+        Else
+            export = True
+            fileName = curCommponent.Name
+    
+            Select Case curCommponent.Type
+                Case vbext_ct_ClassModule
+                    fileName = fileName & ".cls"
+                Case vbext_ct_MSForm
+                    fileName = fileName & ".frm"
+                Case vbext_ct_StdModule
+                    fileName = fileName & ".bas"
+                Case vbext_ct_Document
+                    export = False
+            End Select
+            
+            If export Then
+                curCommponent.export exportPath & fileName
+            End If
+    
+            End If
     Next curCommponent
     
     Debug.Print "Export is ready"
@@ -65,7 +69,7 @@ Public Sub ImportModules()
     Dim importPath As String
     Dim curCommponents As VBIDE.VBComponents
     
-    If Not Me.GetRepoPath(importPath) Then
+    If Not Me.RepoPathExists(importPath) Then
         MsgBox "Import Folder not exist"
         Exit Sub
     End If
@@ -98,7 +102,7 @@ Public Sub ImportModules()
 
 End Sub
 
-Function GetRepoPath(ByRef exportPath As String) As Boolean
+Function RepoPathExists(ByRef exportPath As String) As Boolean
     Dim WshShell As Object
     Dim FSO As Object
     Dim rootPath As String
@@ -121,9 +125,9 @@ Function GetRepoPath(ByRef exportPath As String) As Boolean
     End If
     
     If FSO.FolderExists(exportPath) = True Then
-        GetRepoPath = True
+        RepoPathExists = True
     Else
-        GetRepoPath = False
+        RepoPathExists = False
     End If
             
 End Function
@@ -134,7 +138,8 @@ End Function
 '
 '=============================================================
 Private Sub Class_Initialize()
-    thisClassModuleName = Application.VBE.ActiveCodePane.CodeModule.Name
+    'thisClassModuleName = Application.VBE.ActiveCodePane.CodeModule.Name
+    thisClassModuleName = "zGitHelper"
 End Sub
 
 '=============================================================
