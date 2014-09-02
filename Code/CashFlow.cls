@@ -9,8 +9,8 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
-Private pOrigin As String
-Private pCCY As String
+Private pOrigin As Origin
+Private pCCY As CCY
 Private pAmount As Double
 Private pDiscountFactor As DiscountFactor
 Private pDueDate As Date
@@ -31,8 +31,8 @@ End Property
 ''''''''''''''''''''''
 ' Currency property
 ''''''''''''''''''''''
-Public Property Get CCY() As String
-    CCY = pCCY
+Public Property Get GetCCY() As CCY
+    GetCCY = pCCY
 End Property
 
 
@@ -56,7 +56,7 @@ End Property
 '
 '=============================================================
 
-Public Sub Initialize(inOrigin As String, inCCY As String, _
+Public Sub Initialize(inOrigin As Origin, inCCY As CCY, _
                       inValue As Double, inValueDate As Date, _
                       inDF As DiscountFactor)
 
@@ -83,8 +83,8 @@ End Function
 Public Function GetNPVinPLN(valueDate As Date, M As MarketState) As Double
     Dim conversionRate As Double: conversionRate = 1
     
-    If Not pCCY = "PLN" Then
-        conversionRate = M.GetCcyRate(pCCY + "PLN")
+    If Not pCCY = CCY.PLN Then
+        conversionRate = M.GetCcyRate(pCCY)
     End If
     
     GetNPVinPLN = conversionRate * GetNPV(valueDate, M)

@@ -1,4 +1,9 @@
 Attribute VB_Name = "Types"
+'=============================================================
+'
+'   TYPES
+'
+'=============================================================
 Public Enum DayMoveConvention
     Following
     ModifiedFollowing
@@ -28,10 +33,45 @@ Public Enum Period
     p20Y
 End Enum
 
+Public Enum CCY
+    PLN
+    EUR
+    USD
+    ALL
+End Enum
+
 Public Enum Position
     Buy
     Sell
 End Enum
+
+Public Enum Origin
+    FRA
+    IRS_CIRS
+    FXSpot
+    FXSwap
+    FXOption
+    FWD_NDF
+    Bond
+    FBond
+End Enum
+
+'=============================================================
+'
+'   TYPE CONVERSION
+'
+'=============================================================
+Public Function StringToCCY(inString As String) As CCY
+    If inString Like "PLN" Then
+        StringToCCY = CCY.PLN
+    ElseIf inString Like "EUR" Then
+        StringToCCY = CCY.EUR
+    ElseIf inString Like "USD" Then
+        StringToCCY = CCY.USD
+    Else
+        StringToCCY = CCY.ALL
+    End If
+End Function
 
 Public Function StringToPosition(inString As String) As Position
     If inString Like "Buy" Then

@@ -47,23 +47,27 @@ Public Property Get Count() As Long
     Count = myCustomCollection.Count
 End Property
 
-Public Function FilterByCCY(str As String) As CashFlowCollection
-    Dim cfs As CashFlowCollection, cf As CashFlow
-    Set cfs = New CashFlowCollection
+Public Function FilterByCCY(cur As CCY) As CashFlowCollection
+    Dim cf As CashFlow
+    Dim cfs As CashFlowCollection: Set cfs = New CashFlowCollection
 
     For Each cf In Me
-        If cf.CCY = str Then cfs.Add cf
+        If cur = ALL Then
+            cfs.Add cf
+        ElseIf cf.GetCCY = cur Then
+            cfs.Add cf
+        End If
     Next
 
     Set FilterByCCY = cfs
 End Function
 
-Public Function FilterByOrigin(str As String) As CashFlowCollection
-    Dim cfs As CashFlowCollection, cf As CashFlow
-    Set cfs = New CashFlowCollection
+Public Function FilterByOrigin(inOrigin As Origin) As CashFlowCollection
+    Dim cf As CashFlow
+    Dim cfs As CashFlowCollection: Set cfs = New CashFlowCollection
 
-    For Each cfs In Me
-        If cf.Origin Like str Then cfs.Add cf
+    For Each cf In Me
+        If cf.Origin = inOrigin Then cfs.Add cf
     Next
 
     Set FilterByOrigin = cfs

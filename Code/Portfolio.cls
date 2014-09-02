@@ -9,43 +9,37 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
+'=============================================================
+'
+'   PRIVATE VARIABLES
+'
+'=============================================================
 Private pCashFlows As CashFlowCollection
 Private pInstruments As InstrumentCollection
 
-Private Function SetCashFlows(valueDate As Date, MP As MarketStateProvider)
-    Dim inst As IInstrument
-    pCashFlows.Clear
-    
-    For Each inst In pInstruments
-        Call pCashFlows.AddCashFlows(inst.GetCashFlows(valueDate, MP))
-    Next
-End Function
-
+'=============================================================
+'
+'   METHODS
+'
+'=============================================================
 Public Function GetNPV(valueDate As Date, ByRef MP As MarketStateProvider) As Double
-    Dim cf As CashFlow
-    Dim pNPV As Double
     
     SetCashFlows valueDate, MP
-    
-    For Each cf In pCashFlows
-        pNPV = pNPV + cf.GetNPVinPLN(valueDate, MP.GetCurrentMarketState)
-    Next
-    
-    GetNPV = pNPV
+    GetNPV = DiscountCashFlows(valueDate, MP, pCashFlows)
     
 End Function
 
-Public Function GetNPVByCCY(valueDate As Date, MP As MarketStateProvider, CCY As String) As Double
-    Dim cf As CashFlow
-    Dim pNPV As Double
+Public Function GetNPVByCCY(valueDate As Date, MP As MarketStateProvider, cur As CCY) As Double
     
     SetCashFlows valueDate, MP
-    
-    For Each cf In pCashFlows.FilterByCCY(CCY)
-        pNPV = pNPV + cf.GetNPV(valueDate, MP.GetCurrentMarketState)
-    Next
-    
-    GetNPVByCCY = pNPV
+    GetNPVByCCY = DiscountCashFlows(valueDate, MP, pCashFlows.FilterByCCY(cur))
+
+End Function
+
+Public Function GetNPVByOrigin(valueDate As Date, MP As MarketStateProvider, inOrigin As Origin) As Double
+        
+    SetCashFlows valueDate, MP
+    GetNPVByOrigin = DiscountCashFlows(valueDate, MP, pCashFlows.FilterByOrigin(inOrigin))
 
 End Function
 
@@ -57,9 +51,29 @@ Public Sub AddInstruments(ByRef newInstruments As InstrumentCollection)
     pInstruments.AddInstruments newInstruments
 End Sub
 
-''''''''''''''''''''''
-' STRUCTURAL
-''''''''''''''''''''''
+'=============================================================
+'
+'   STRUCTURAL
+'
+'=============================================================
+Private Function SetCashFlows(valueDate As Date, MP As MarketStateProvider)
+    Dim inst As IInstrument
+    pCashFlows.Clear
+    
+    For Each inst In pInstruments
+        Call pCashFlows.AddCashFlows(inst.GetCashFlows(valueDate, MP))
+    Next
+End Function
+
+Private Function DiscountCashFlows(valueDate As Date, MP As MarketStateProvider, cashFlows As CashFlowCollection)
+    Dim cf As CashFlow
+    
+    For Each cf In cashFlows
+        DiscountCashFlows = DiscountCashFlows + cf.GetNPV(valueDate, MP.GetCurrentMarketState)
+    Next
+
+End Function
+
 Private Sub Class_Initialize()
     Set pCashFlows = New CashFlowCollection
     Set pInstruments = New InstrumentCollection

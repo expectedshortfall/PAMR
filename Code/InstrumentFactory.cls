@@ -34,7 +34,7 @@ Public Sub GetIRS_CIRS(ByRef instruments As InstrumentCollection, ws As Workshee
     
     instruments.Add Factory.CreateIRS_CIRS()
         
-    Debug.Print "Loading IRS_CIRS has finished successfully"
+    'Debug.Print "GetIRS_CIRS"
 
 End Sub
 
@@ -48,10 +48,12 @@ Public Sub GetFRA(ByRef instruments As InstrumentCollection, ws As Worksheet)
         Dim forwardCurveName As String: forwardCurveName = IIf(.Cells(i, 5) = "PLN", "PL3", .Cells(i, 5))
         Dim dcc As DayCountConvention: dcc = IIf(.Cells(i, 5) = "PLN", cAct365, cAct360)
         
-        instruments.Add Factory.CreateFRA(.Cells(i, 1).Value, .Cells(i, 2).Value, .Cells(i, 3).Value, _
-                                          .Cells(i, 4).Value, .Cells(i, 5).Value, StringToPosition(.Cells(i, 6).Value), _
+        instruments.Add Factory.CreateFRA(.Cells(i, 1).Value, .Cells(i, 2).Value, _
+                                          .Cells(i, 3).Value, .Cells(i, 4).Value, _
+                                          Types.StringToCCY(.Cells(i, 5).Value), _
+                                          Types.StringToPosition(.Cells(i, 6).Value), _
                                           .Cells(i, 7), .Cells(i, 8), _
-                                           Factory.CreateRateManager(discountCurveName, forwardCurveName, dcc))
+                                          Factory.CreateRateManager(discountCurveName, forwardCurveName, dcc))
         i = i + 1
     Loop
     End With

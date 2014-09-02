@@ -32,8 +32,25 @@ Public Function CreateRateManager(inDiscountCurveName As String, inForwardCurveN
 
 End Function
 
-Public Function CreateFRA(inTradeDate As Date, inValueDate As Date, inMaturityDate As Date, _
-                          inNominal As Double, inCurrency As String, inPosition As Position, _
+'=============================================================
+'
+'   RISK MEASURES FACTORY
+'
+'=============================================================
+Public Function CreateBPV(CCY As String) As BPV
+    
+    Set CreateBPV = New BPV
+    CreateBPV.Initialize CCY
+
+End Function
+
+'=============================================================
+'
+'   INSTRUMENT FACTORY
+'
+'=============================================================
+Public Function CreateFRA(inTradeDate As Date, inValueDate As Date, inMaturityDate As Date, inNominal As Double, _
+                          inCurrency As CCY, inPosition As Position, _
                           inRate As Double, inRecFixingDate As Integer, inRateManager As RateManager) As FRA
         
         Set CreateFRA = New FRA

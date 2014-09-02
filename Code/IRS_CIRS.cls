@@ -36,7 +36,6 @@ End Property
 '
 '=============================================================
 Public Sub Initialize()
-    Debug.Print "Initializing IRS_CIRS from factory"
 End Sub
 
 
@@ -46,6 +45,5 @@ End Sub
 '
 '=============================================================
 Private Sub Class_Initialize()
-    Debug.Print "IRS_CIRS constructor"
     pName = "IRS_CIRS"
 End Sub

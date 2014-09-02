@@ -22,9 +22,9 @@ Public Function GetMarketStateFromDate(SnapshotDate As Date) As MarketState
 
 End Function
 
-Public Sub AddMarketState(ms As MarketState)
-    If Not pMarketStates.Exists(ms.SnapshotDate) Then
-        pMarketStates.Add ms.SnapshotDate, ms
+Public Sub AddMarketState(MS As MarketState)
+    If Not pMarketStates.Exists(MS.SnapshotDate) Then
+        pMarketStates.Add MS.SnapshotDate, MS
     End If
 End Sub
 

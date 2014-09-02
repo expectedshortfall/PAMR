@@ -21,17 +21,17 @@ Public Sub Initialize(inDate As Date)
     pDate = inDate
 End Sub
 
-Public Function GetCcyRate(rateName As String) As Double
-    If pCcyRates.Exists(rateName) Then
-         GetCcyRate = pCcyRates.Item(rateName)
+Public Function GetCcyRate(ccyRate As CCY) As Double
+    If pCcyRates.Exists(ccyRate) Then
+         GetCcyRate = pCcyRates.Item(ccyRate)
     Else
         GetCcyRate = -1
     End If
 End Function
 
-Public Sub AddCcyRate(rateName As String, rateValue As Double)
-    If Not pCcyRates.Exists(rateName) Then
-        pCcyRates.Add rateName, rateValue
+Public Sub AddCcyRate(ccyRate As CCY, rateValue As Double)
+    If Not pCcyRates.Exists(ccyRate) Then
+        pCcyRates.Add ccyRate, rateValue
     End If
 End Sub
 

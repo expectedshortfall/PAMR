@@ -11,10 +11,9 @@ Option Explicit
 
 Private pMemoryLimit As Integer
 
-
 '=============================================================
 '
-'   LOADING RATES
+'   METHODS
 '
 '=============================================================
 
@@ -46,8 +45,8 @@ Public Function LoadMarketStateProvider(inDate As Date) As MarketStateProvider
             With tmpMarketState
                 Dim j As Integer: j = 4 'start reading from 4th column
                 
-                .AddCcyRate wsRates.Cells(1, 2).Value, wsRates.Cells(i, 2).Value 'ADD EURPLN
-                .AddCcyRate wsRates.Cells(1, 3).Value, wsRates.Cells(i, 3).Value 'ADD USDPLN
+                .AddCcyRate CCY.EUR, wsRates.Cells(i, 2).Value 'ADD EURPLN
+                .AddCcyRate CCY.USD, wsRates.Cells(i, 3).Value 'ADD USDPLN
                 
                 While Not wsRates.Cells(i, j).Value = Empty
                     .AddCurve GetCurve(wsRates, i, j)
@@ -82,50 +81,9 @@ End Function
 
 '=============================================================
 '
-'   LOADING RATES
+'   PRIVATE METHODS
 '
 '=============================================================
-
-Public Function LoadMarketState(inDate As Date) As MarketState
-   Dim wb As Workbook, ws As Worksheet
-   
-   Application.ScreenUpdating = False
-    
-        Set wb = Workbooks.Open(ThisWorkbook.Path + "\rates.xls", ReadOnly:=True)
-        Set ws = wb.Worksheets(1)
-        
-        Dim i As Integer: i = FindIndexForDate(inDate, ws)
-        Dim j As Integer: j = 4
-        
-        Set LoadMarketState = Factory.CreateMarketSate(inDate)
-        With LoadMarketState
-            .AddCcyRate ws.Cells(1, 2).Value, ws.Cells(i, 2).Value 'ADD EURPLN
-            .AddCcyRate ws.Cells(1, 3).Value, ws.Cells(i, 3).Value 'ADD USDPLN
-            
-            While Not ws.Cells(i, j).Value = Empty
-                .AddCurve GetCurve(ws, i, j)
-            Wend
-        
-        End With
-        
-        wb.Close False: Set wb = Nothing
-        
-        Set wb = Workbooks.Open(ThisWorkbook.Path + "\ref.xls", ReadOnly:=True)
-        Set ws = wb.Worksheets(1)
-
-        i = FindIndexForDate(inDate, ws)
-        j = 2
-        With LoadMarketState
-             While Not ws.Cells(i, j).Value = Empty
-                .AddCurve GetCurve(ws, i, j, False)
-            Wend
-        End With
-        
-        wb.Close False: Set wb = Nothing
-    
-    Application.ScreenUpdating = True
-        
-End Function
 
 Private Function GetCurve(ws As Worksheet, row As Integer, ByRef column As Integer, Optional isRateFile As Boolean = True) As Curve
         

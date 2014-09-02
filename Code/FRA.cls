@@ -15,14 +15,14 @@ Dim pFixingDate As Date
 Dim pValueDate As Date
 Dim pMaturityDate As Date
 Dim pNominal As Double
-Dim pCurrency As String
+Dim pCurrency As CCY
 Dim pPosition As Position
 Dim pRate As Double
 Dim pRecFixingDate As Integer
 
+Dim pOrigin As Origin
 Dim pName As String
 Dim pRateManager As RateManager
-
 
 '=============================================================
 '
@@ -53,7 +53,7 @@ Public Function IInstrument_GetCashFlows(valueDate As Date, ByRef MP As MarketSt
     
     cfAmount = acc * pNominal * fdf * IIf(pPosition = Buy, 1, -1)
     
-    Call cf.Initialize(Me.IInstrument_Name, pCurrency, cfAmount, pValueDate, pRateManager.CreateDiscountFactor)
+    Call cf.Initialize(pOrigin, pCurrency, cfAmount, pValueDate, pRateManager.CreateDiscountFactor)
     
     res.AddCashFlow cf
     
@@ -71,7 +71,7 @@ End Property
 '
 '=============================================================
 Public Sub Initialize(inTradeDate As Date, inValueDate As Date, inMaturityDate As Date, _
-                      inNominal As Double, inCurrency As String, inPosition As Position, _
+                      inNominal As Double, inCurrency As CCY, inPosition As Position, _
                       inRate As Double, inRecFixingDate As Integer, inRateManager As RateManager)
                      
     pFixingDate = GetFixingDate(inValueDate, inRecFixingDate)
@@ -94,5 +94,6 @@ End Sub
 '
 '=============================================================
 Private Sub Class_Initialize()
+    pOrigin = Origin.FRA
     pName = "FRA"
 End Sub

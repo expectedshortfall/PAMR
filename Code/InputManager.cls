@@ -15,23 +15,14 @@ Option Explicit
 '
 '=============================================================
 Public Function LoadMarketStateProvider(inDate As Date) As MarketStateProvider
-    Dim msl As MarketStateFactory: Set msl = New MarketStateFactory
+    Dim msf As MarketStateFactory: Set msf = New MarketStateFactory
     
-    Set LoadMarketStateProvider = msl.LoadMarketStateProvider(inDate)
+    Set LoadMarketStateProvider = msf.LoadMarketStateProvider(inDate)
     
-    Set msl = Nothing
+    Set msf = Nothing
         
 End Function
 
-
-Public Function LoadMarketState(inDate As Date) As MarketState
-    Dim msl As MarketStateFactory: Set msl = New MarketStateFactory
-    
-    Set LoadMarketState = msl.LoadMarketState(inDate)
-    
-    Set msl = Nothing
-        
-End Function
 
 '=============================================================
 '
