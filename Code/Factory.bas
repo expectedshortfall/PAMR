@@ -40,3 +40,10 @@ Public Function CreateFRA(inTradeDate As Date, inValueDate As Date, inMaturityDa
         CreateFRA.Initialize inTradeDate, inValueDate, inMaturityDate, inNominal, inCurrency, inPosition, _
                              inRate, inRecFixingDate, inRateManager
 End Function
+
+Public Function CreateIRS_CIRS() As IRS_CIRS
+    
+    Set CreateIRS_CIRS = New IRS_CIRS
+    CreateIRS_CIRS.Initialize
+
+End Function

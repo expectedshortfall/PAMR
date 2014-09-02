@@ -31,7 +31,11 @@ End Function
     
 
 Public Sub GetIRS_CIRS(ByRef instruments As InstrumentCollection, ws As Worksheet)
-    'Debug.Print "GetIRS_CIRS"
+    
+    instruments.Add Factory.CreateIRS_CIRS()
+        
+    Debug.Print "Loading IRS_CIRS has finished successfully"
+
 End Sub
 
 Public Sub GetFRA(ByRef instruments As InstrumentCollection, ws As Worksheet)
