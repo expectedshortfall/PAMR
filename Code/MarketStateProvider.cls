@@ -9,9 +9,19 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
+'=============================================================
+'
+'   PRIVATE VARIABLES
+'
+'=============================================================
 Private pMarketStates As Scripting.Dictionary
 Private pCurrentDate As Date
 
+'=============================================================
+'
+'   METHODS
+'
+'=============================================================
 Public Function GetMarketStateFromDate(SnapshotDate As Date) As MarketState
     If pMarketStates.Exists(SnapshotDate) Then
          Set GetMarketStateFromDate = pMarketStates.Item(SnapshotDate)
@@ -67,6 +77,9 @@ Public Function GetCurrentCurve(curveName As String) As Curve
      Set GetCurrentCurve = pMarketStates.Item(pCurrentDate).GetCurve(curveName)
 End Function
 
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' Gets MarketState object for current Date
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 Public Function GetCurrentMarketState() As MarketState
     Set GetCurrentMarketState = GetMarketStateFromDate(pCurrentDate)
 End Function

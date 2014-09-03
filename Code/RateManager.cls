@@ -9,6 +9,11 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
+'=============================================================
+'
+'   PRIVATE VARIABLES
+'
+'=============================================================
 Private pDcc As DayCountConvention
 Private pDiscountCurveName As String
 Private pForwardCurveName As String
@@ -48,6 +53,3 @@ End Function
 Public Function GetYearFraction(startDate As Date, endDate As Date) As Double
     GetYearFraction = YearFrac(startDate, endDate, pDcc)
 End Function
-
-
-

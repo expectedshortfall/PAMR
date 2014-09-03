@@ -9,6 +9,11 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
+'=============================================================
+'
+'   PRIVATE VARIABLES
+'
+'=============================================================
 Private pMemoryLimit As Integer
 
 '=============================================================
@@ -84,7 +89,6 @@ End Function
 '   PRIVATE METHODS
 '
 '=============================================================
-
 Private Function GetCurve(ws As Worksheet, row As Integer, ByRef column As Integer, Optional isRateFile As Boolean = True) As Curve
         
         Dim curveName As String: curveName = GetRatesName(ws.Cells(1, column).Value, isRateFile)

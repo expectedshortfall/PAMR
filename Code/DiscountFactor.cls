@@ -9,9 +9,19 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
+'=============================================================
+'
+'   PRIVATE VARIABLES
+'
+'=============================================================
 Private pDcc As DayCountConvention
 Private pDiscountCurveName As String
 
+'=============================================================
+'
+'   METHODS
+'
+'=============================================================
 Public Function Calculate(startDate As Date, endDate As Date, ByRef M As MarketState) As Double
     
     Dim r As Double: r = M.GetCurve(pDiscountCurveName).GetRate(endDate)

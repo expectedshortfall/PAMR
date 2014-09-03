@@ -9,46 +9,17 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
+'=============================================================
+'
+'   PRIVATE VARIABLES
+'
+'=============================================================
 Private pOrigin As Origin
 Private pCCY As CCY
 Private pAmount As Double
 Private pDiscountFactor As DiscountFactor
 Private pDueDate As Date
 
-'=============================================================
-'
-'   PROPERTIES
-'
-'=============================================================
-
-''''''''''''''''''''''
-' Origin property
-''''''''''''''''''''''
-Public Property Get Origin() As String
-    Origin = pOrigin
-End Property
-
-''''''''''''''''''''''
-' Currency property
-''''''''''''''''''''''
-Public Property Get GetCCY() As CCY
-    GetCCY = pCCY
-End Property
-
-
-''''''''''''''''''''''
-' Origin property
-''''''''''''''''''''''
-Public Property Get Amount() As Double
-    Amount = pAmount
-End Property
-
-''''''''''''''''''''''
-' CashFlow Date property
-''''''''''''''''''''''
-Public Property Get DueDate() As Date
-    DueDate = pDueDate
-End Property
 
 '=============================================================
 '
@@ -90,6 +61,41 @@ Public Function GetNPVinPLN(valueDate As Date, M As MarketState) As Double
     GetNPVinPLN = conversionRate * GetNPV(valueDate, M)
     
 End Function
+
+'=============================================================
+'
+'   PROPERTIES
+'
+'=============================================================
+
+''''''''''''''''''''''
+' Origin property
+''''''''''''''''''''''
+Public Property Get Origin() As String
+    Origin = pOrigin
+End Property
+
+''''''''''''''''''''''
+' Currency property
+''''''''''''''''''''''
+Public Property Get GetCCY() As CCY
+    GetCCY = pCCY
+End Property
+
+
+''''''''''''''''''''''
+' Amount property
+''''''''''''''''''''''
+Public Property Get Amount() As Double
+    Amount = pAmount
+End Property
+
+''''''''''''''''''''''
+' CashFlow Date property
+''''''''''''''''''''''
+Public Property Get DueDate() As Date
+    DueDate = pDueDate
+End Property
 
 
 

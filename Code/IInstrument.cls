@@ -9,10 +9,13 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
+'=============================================================
+'
+'   PUBLIC IINTERFACE INTERFACE
+'
+'=============================================================
 Public Function GetCashFlows(valueDate As Date, MP As MarketStateProvider) As CashFlowCollection
-
 End Function
 
 Public Property Get Name() As String
-
 End Property

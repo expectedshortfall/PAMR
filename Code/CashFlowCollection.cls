@@ -9,8 +9,18 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
+'=============================================================
+'
+'   PRIVATE VARIABLES
+'
+'=============================================================
 Dim myCustomCollection As Collection
 
+'=============================================================
+'
+'   METHODS
+'
+'=============================================================
 Public Sub Add(ByVal Item As Object)
     myCustomCollection.Add Item
 End Sub
@@ -79,6 +89,11 @@ Attribute NewEnum.VB_MemberFlags = "40"
     Set NewEnum = myCustomCollection.[_NewEnum]
 End Property
 
+'=============================================================
+'
+'   STRUCTURAL
+'
+'=============================================================
 Private Sub Class_Initialize()
     Set myCustomCollection = New Collection
 End Sub

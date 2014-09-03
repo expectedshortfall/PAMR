@@ -10,6 +10,11 @@ Attribute VB_Exposed = False
 Option Explicit
 Implements IInstrument
 
+'=============================================================
+'
+'   PRIVATE VARIABLES
+'
+'=============================================================
 Dim pTradeDate As Date
 Dim pFixingDate As Date
 Dim pValueDate As Date

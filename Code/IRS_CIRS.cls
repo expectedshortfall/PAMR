@@ -10,6 +10,11 @@ Attribute VB_Exposed = False
 Option Explicit
 Implements IInstrument
 
+'=============================================================
+'
+'   PRIVATE VARIABLES
+'
+'=============================================================
 Dim pName As String
 Dim pRateManager As RateManager
 
@@ -20,8 +25,7 @@ Dim pRateManager As RateManager
 '=============================================================
 Public Function IInstrument_GetCashFlows(valueDate As Date, ByRef MP As MarketStateProvider) As CashFlowCollection
     Dim res As CashFlowCollection: Set res = New CashFlowCollection
-    
-    
+        
     Set IInstrument_GetCashFlows = res
 
 End Function

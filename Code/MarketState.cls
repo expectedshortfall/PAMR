@@ -7,12 +7,22 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
+Option Explicit
+
+'=============================================================
+'
+'   PRIVATE VARIABLES
+'
+'=============================================================
 Private pCcyRates As Scripting.Dictionary
 Private pCurves As Scripting.Dictionary
 Private pDate As Date
 
-Option Explicit
-
+'=============================================================
+'
+'   METHODS
+'
+'=============================================================
 Public Property Get SnapshotDate() As Date
     SnapshotDate = pDate
 End Property
