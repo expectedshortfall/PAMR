@@ -72,6 +72,9 @@ Public Function GetForwardRate(valuationDate As Date, startDate As Date, endDate
 
 End Function
 
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' Shift entire curve in parralell
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 Public Sub ShiftParallel(shift As Double)
     Dim v As Variant
     
@@ -81,6 +84,22 @@ Public Sub ShiftParallel(shift As Double)
 
 End Sub
 
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' Shift single rate on a given tenor
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+Public Sub ShiftRateOnTenor(inTenor As Period, shift As Double)
+    Dim tenorDate As Date: tenorDate = CurveTenorDate(pCurveDate, inTenor)
+
+    If Not pRates.Exists(tenorDate) Then
+        Err.Raise vbObjectError + 513, "Curve::ShiftRateOnTenor", "Tenor not present in curve: " + pName
+    Else
+       pRates.Item(tenorDate) = pRates.Item(tenorDate) + shift
+    End If
+End Sub
+
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' Human readable string representation
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 Public Function ToString() As String
     Dim v As Variant
     Dim res As String: res = pName + " as of " + CStr(pCurveDate) + vbNewLine
@@ -91,6 +110,25 @@ Public Function ToString() As String
     ToString = res
 End Function
 
+
+'=============================================================
+'
+'   STRUCTURAL
+'
+'=============================================================
+Private Sub Class_Initialize()
+    Set pRates = New Scripting.Dictionary
+End Sub
+
+Private Sub Class_Terminate()
+    Set pRates = Nothing
+End Sub
+
+'=============================================================
+'
+'   PRIVATE FUNCTIONS
+'
+'=============================================================
 Private Function GetInterpolatedRate(rateDate As Date) As Double
     
     Dim dates() As Variant: dates = pRates.keys
@@ -121,21 +159,3 @@ Private Function Interpolate(t As Date, T_i As Date, T_j As Date, r_i As Double,
     Interpolate = r_i + (t - T_i) / (T_j - T_i) * (r_j - r_i)
 End Function
 
-'=============================================================
-'
-'   STRUCTURAL
-'
-'=============================================================
-Private Sub Class_Initialize()
-    Set pRates = New Scripting.Dictionary
-End Sub
-
-Private Sub Class_Terminate()
-    Set pRates = Nothing
-End Sub
-
-'=============================================================
-'
-'   PRIVATE FUNCTIONS
-'
-'=============================================================
