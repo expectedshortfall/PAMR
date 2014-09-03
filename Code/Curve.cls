@@ -29,13 +29,13 @@ End Property
 '   METHODS
 '
 '=============================================================
-Public Sub Initialize(curveDate As Date, Name As String)
-    pCurveDate = curveDate
-    pName = Name
+Public Sub AddRate(tenor As Period, rate As Double)
+    
+    Me.AddRateByDate CurveTenorDate(pCurveDate, tenor), rate
+
 End Sub
 
-Public Sub AddRate(tenor As Period, rate As Double)
-    Dim tenorDate As Date: tenorDate = CurveTenorDate(pCurveDate, tenor)
+Public Sub AddRateByDate(tenorDate As Date, rate As Double)
     
     If Not pRates.Exists(tenorDate) Then
         pRates.Add tenorDate, rate
@@ -44,6 +44,7 @@ Public Sub AddRate(tenor As Period, rate As Double)
     pMaxIndex = pRates.Count - 1
 
 End Sub
+
 
 Public Function GetRate(rateDate As Date) As Double
     If pRates.Exists(rateDate) Then
@@ -73,7 +74,7 @@ Public Function GetForwardRate(valuationDate As Date, startDate As Date, endDate
 End Function
 
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-' Shift entire curve in parralell
+' Shift entire curve in parallel
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 Public Sub ShiftParallel(shift As Double)
     Dim v As Variant
@@ -87,11 +88,11 @@ End Sub
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 ' Shift single rate on a given tenor
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-Public Sub ShiftRateOnTenor(inTenor As Period, shift As Double)
+Public Sub ShiftOnTenor(inTenor As Period, shift As Double)
     Dim tenorDate As Date: tenorDate = CurveTenorDate(pCurveDate, inTenor)
 
     If Not pRates.Exists(tenorDate) Then
-        Err.Raise vbObjectError + 513, "Curve::ShiftRateOnTenor", "Tenor not present in curve: " + pName
+        Err.Raise vbObjectError + 513, "Curve::ShiftOnTenor", "Tenor not present in curve: " + pName
     Else
        pRates.Item(tenorDate) = pRates.Item(tenorDate) + shift
     End If
@@ -110,6 +111,28 @@ Public Function ToString() As String
     ToString = res
 End Function
 
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' Cloning
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+Public Function Clone() As Curve
+    Dim v As Variant
+    Dim myClone As Curve: Set myClone = Factory.CreateCurve(pName, pCurveDate)
+    
+    For Each v In pRates.keys
+        myClone.AddRateByDate CDate(v), pRates.Item(v)
+    Next
+    
+    Set Clone = myClone
+    
+End Function
+
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' Initialization, should be used only in factory module
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+Public Sub Initialize(curveDate As Date, Name As String)
+    pCurveDate = curveDate
+    pName = Name
+End Sub
 
 '=============================================================
 '

@@ -50,6 +50,7 @@ Public Function LoadMarketStateProvider(inDate As Date) As MarketStateProvider
             With tmpMarketState
                 Dim j As Integer: j = 4 'start reading from 4th column
                 
+                .AddCcyRate CCY.PLN, 1                         'ADD EURPLN
                 .AddCcyRate CCY.EUR, wsRates.Cells(i, 2).Value 'ADD EURPLN
                 .AddCcyRate CCY.USD, wsRates.Cells(i, 3).Value 'ADD USDPLN
                 

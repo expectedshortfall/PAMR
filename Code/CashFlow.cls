@@ -27,12 +27,12 @@ Private pDueDate As Date
 '
 '=============================================================
 
-Public Sub Initialize(inOrigin As Origin, inCCY As CCY, _
+Public Sub Initialize(inOrigin As Origin, inCcy As CCY, _
                       inValue As Double, inValueDate As Date, _
                       inDF As DiscountFactor)
 
     pOrigin = inOrigin
-    pCCY = inCCY
+    pCCY = inCcy
     pAmount = inValue
     pDueDate = inValueDate
     
@@ -52,13 +52,8 @@ Public Function GetNPV(valueDate As Date, M As MarketState) As Double
 End Function
 
 Public Function GetNPVinPLN(valueDate As Date, M As MarketState) As Double
-    Dim conversionRate As Double: conversionRate = 1
     
-    If Not pCCY = CCY.PLN Then
-        conversionRate = M.GetCcyRate(pCCY)
-    End If
-    
-    GetNPVinPLN = conversionRate * GetNPV(valueDate, M)
+    GetNPVinPLN = M.GetCcyRate(pCCY) * GetNPV(valueDate, M)
     
 End Function
 

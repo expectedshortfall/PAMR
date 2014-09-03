@@ -73,6 +73,21 @@ Public Function StringToCCY(inString As String) As CCY
     End If
 End Function
 
+Public Function CcyToString(inCcy As CCY) As String
+    Select Case inCcy
+        Case CCY.PLN
+            CcyToString = "PLN"
+        Case CCY.EUR
+            CcyToString = "EUR"
+        Case CCY.USD
+            CcyToString = "USD"
+        Case CCY.ALL
+            CcyToString = "ALL"
+        Case Else
+        Err.Raise vbObject + 513, "Types::CcyToString", "Unknown currency"
+    End Select
+End Function
+
 Public Function StringToPosition(inString As String) As Position
     If inString Like "Buy" Then
         StringToPosition = Buy
@@ -113,4 +128,8 @@ Public Function StringToPeriod(inString As String) As Period
         StringToPeriod = p20Y
     End If
 
+End Function
+
+Public Function CastToCurve(curveObj As Variant) As Curve
+    Set CastToCurve = curveObj
 End Function

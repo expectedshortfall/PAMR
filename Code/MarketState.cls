@@ -31,25 +31,25 @@ Public Sub Initialize(inDate As Date)
     pDate = inDate
 End Sub
 
-Public Function GetCcyRate(ccyRate As CCY) As Double
-    If pCcyRates.Exists(ccyRate) Then
-         GetCcyRate = pCcyRates.Item(ccyRate)
+Public Function GetCcyRate(inCcy As CCY) As Double
+    If Not pCcyRates.Exists(inCcy) Then
+        Err.Raise vbObjectError + 513, "MarketState::GetCcyRate", "Currency: " + Types.CcyToString(inCcy) + " is not present in market"
     Else
-        GetCcyRate = -1
+        GetCcyRate = pCcyRates.Item(inCcy)
     End If
 End Function
 
-Public Sub AddCcyRate(ccyRate As CCY, rateValue As Double)
-    If Not pCcyRates.Exists(ccyRate) Then
-        pCcyRates.Add ccyRate, rateValue
+Public Sub AddCcyRate(inCcy As CCY, rateValue As Double)
+    If Not pCcyRates.Exists(inCcy) Then
+        pCcyRates.Add inCcy, rateValue
     End If
 End Sub
 
 Public Function GetCurve(curveName As String) As Curve
-    If pCurves.Exists(curveName) Then
-         Set GetCurve = pCurves.Item(curveName)
+    If Not pCurves.Exists(curveName) Then
+        Err.Raise vbObjectError + 513, "MarketState::GetCurve", "Curve: " + curveName + " is not present in market"
     Else
-         MsgBox "There is no " + curveName + " curve in the Market"
+        Set GetCurve = pCurves.Item(curveName)
     End If
 End Function
 
@@ -58,6 +58,92 @@ Public Sub AddCurve(curveObj As Curve)
         pCurves.Add curveObj.Name, curveObj
     End If
 End Sub
+
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' Shift Currency Rate by given multiplier
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+Public Sub ShiftFXRate(inCcy As CCY, multiplier As Double)
+    If Not pCcyRates.Exists(inCcy) Then
+        Err.Raise vbObjectError + 513, "MarketState::ShiftFXRate", "Currency: " + Types.CcyToString(inCcy) + " is not present in market"
+    Else
+        pCcyRates.Item(inCcy) = pCcyRates.Item(inCcy) * (1 + multiplier)
+    End If
+End Sub
+
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' Shift all curves in parallel
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+Public Sub ShiftMarketParallel(shift As Double)
+    Dim v As Variant
+    
+    For Each v In pCurves.keys
+        Me.ShiftCurveParallel CStr(v), shift
+    Next
+    
+End Sub
+
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' Shift single curve in parallel
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+Public Sub ShiftCurveParallel(curveName As String, shift As Double)
+    
+    If Not pCurves.Exists(curveName) Then
+        Err.Raise vbObjectError + 513, "MarketState::ShiftCurveParallel", "Curve: " + curveName + " is not present in market"
+    Else
+        Types.CastToCurve(pCurves.Item(curveName)).ShiftParallel shift
+    End If
+
+End Sub
+
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' Shift single rate on a given tenor
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+Public Sub ShiftCurveOnTenor(curveName As String, inTenor As Period, shift As Double)
+    
+    If Not pCurves.Exists(curveName) Then
+        Err.Raise vbObjectError + 513, "MarketState::ShiftCurveOnTenor", "Curve: " + curveName + " is not present in market"
+    Else
+        Types.CastToCurve(pCurves.Item(curveName)).ShiftOnTenor inTenor, shift
+    End If
+
+End Sub
+
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' Human readable string representation
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+Public Function ToString() As String
+    Dim v As Variant
+    Dim res As String: res = "Market state as of " + CStr(pDate) + vbNewLine
+    
+    For Each v In pCcyRates.keys
+        res = res + Types.CcyToString(CLng(v)) + " : " + CStr(pCcyRates.Item(v)) + vbNewLine
+    Next
+    
+    For Each v In pCurves.keys
+        res = res + Types.CastToCurve(pCurves.Item(v)).ToString + vbNewLine
+    Next
+    
+    ToString = res
+End Function
+
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' Cloning
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+Public Function Clone() As MarketState
+    Dim v As Variant
+    Dim myClone As MarketState: Set myClone = Factory.CreateMarketSate(pDate)
+    
+    For Each v In pCcyRates.keys
+        myClone.AddCcyRate CLng(v), pCcyRates.Item(v)
+    Next
+    
+    For Each v In pCurves.keys
+        myClone.AddCurve Types.CastToCurve(pCurves.Item(v)).Clone
+    Next
+    
+    Set Clone = myClone
+    
+End Function
 
 '=============================================================
 '

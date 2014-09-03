@@ -6,6 +6,9 @@ Public Function CreateMarketSate(inDate As Date) As MarketState
     CreateMarketSate.Initialize inDate:=inDate
 End Function
 
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' Create MarketStatePrpvider object for given date
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 Public Function CreateMarketStateProvider(inDate As Date) As MarketStateProvider
     Set CreateMarketStateProvider = New MarketStateProvider
     CreateMarketStateProvider.Initialize inDate
@@ -37,10 +40,10 @@ End Function
 '   RISK MEASURES FACTORY
 '
 '=============================================================
-Public Function CreateBPV(CCY As String) As BPV
+Public Function CreateBPV(inCcy As CCY) As BPV
     
     Set CreateBPV = New BPV
-    CreateBPV.Initialize CCY
+    CreateBPV.Initialize inCcy
 
 End Function
 

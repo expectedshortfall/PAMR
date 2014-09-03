@@ -16,15 +16,15 @@ Implements IRiskMeasureCalculator
 '
 '=============================================================
 Dim pName As String
-Dim pCCY As String
+Dim pCCY As CCY
 
 '=============================================================
 '
 '   METHODS
 '
 '=============================================================
-Public Sub Initialize(inCCY As String)
-    pCCY = inCCY
+Public Sub Initialize(inCcy As CCY)
+    pCCY = inCcy
 End Sub
 
 '=============================================================
@@ -32,13 +32,13 @@ End Sub
 '   IMPLEMENTING IRiskMeasureCalculator INTERFACE
 '
 '=============================================================
-Public Function IRiskMeasureCalculator_Calculate(valueDate As Date, P As Portfolio, MP As MarketStateProvider) As Double
-    Dim currentValue As Double
+Public Function IRiskMeasureCalculator_Calculate(valueDate As Date, P As Portfolio, MSP As MarketStateProvider) As Double
+    
+    Dim currentValue As Double: currentValue = P.GetNPVByCCY(valueDate, MSP, pCCY)
     Dim shiftedValue As Double
     
-    
-    
     IRiskMeasureCalculator_Calculate = (currentValue - shiftedValue)
+
 End Function
 
 Public Property Get IRiskMeasureCalculator_Name() As String

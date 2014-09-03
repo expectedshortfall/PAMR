@@ -26,7 +26,7 @@ Public Function GetMarketStateFromDate(SnapshotDate As Date) As MarketState
     If pMarketStates.Exists(SnapshotDate) Then
          Set GetMarketStateFromDate = pMarketStates.Item(SnapshotDate)
     Else
-         MsgBox "There is no data for given date: " + CStr(SnapshotDate)
+         Err.Raise vbObject + 513, "MarketStateProvider::GetMarketStateFromDate", "There is no data for given date: " + CStr(SnapshotDate)
          GetMarketStateFromDate = xlErrNA
     End If
 
