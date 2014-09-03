@@ -72,6 +72,15 @@ Public Function GetForwardRate(valuationDate As Date, startDate As Date, endDate
 
 End Function
 
+Public Sub ShiftParallel(shift As Double)
+    Dim v As Variant
+    
+    For Each v In pRates.keys
+       pRates.Item(v) = pRates.Item(v) + shift
+    Next v
+
+End Sub
+
 Public Function ToString() As String
     Dim v As Variant
     Dim res As String: res = pName + " as of " + CStr(pCurveDate) + vbNewLine

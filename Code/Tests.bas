@@ -29,6 +29,19 @@ Sub TestNPV2()
 
 End Sub
 
+Sub TestParallelCurveShit()
+    Dim c As Curve: Set c = Factory.CreateCurve("TEST", #1/1/2014#)
+    
+    c.AddRate pSN, 3
+    c.AddRate p1M, 4
+    
+    c.ShiftParallel 1
+    
+    Debug.Assert c.GetRateForTenor(pSN) = 4
+    Debug.Assert c.GetRateForTenor(p1M) = 5
+        
+End Sub
+
 Sub TestDiscountFactor()
     'VALUATION DATE     2013-02-05
     'FORWRAD DATE       2013-04-02
