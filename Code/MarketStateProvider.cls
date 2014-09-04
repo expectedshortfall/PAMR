@@ -84,6 +84,21 @@ Public Function GetCurrentMarketState() As MarketState
     Set GetCurrentMarketState = GetMarketStateFromDate(pCurrentDate)
 End Function
 
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' Cloning
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+Public Function Clone() As MarketStateProvider
+    Dim v As Variant
+    Dim myClone As MarketStateProvider: Set myClone = Factory.MarketStateProvider(pCurrentDate)
+    
+    For Each v In pMarketStates.keys
+        myClone.AddMarketState Types.CastToMarketState(pMarketStates.Item(v)).Clone
+    Next
+    
+    Set Clone = myClone
+    
+End Function
+
 '=============================================================
 '
 '   STRUCTRUAL

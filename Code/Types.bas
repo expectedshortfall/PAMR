@@ -133,3 +133,7 @@ End Function
 Public Function CastToCurve(curveObj As Variant) As Curve
     Set CastToCurve = curveObj
 End Function
+
+Public Function CastToMarketState(marketStateObj As Variant) As MarketState
+    Set CastToMarketState = marketStateObj
+End Function
