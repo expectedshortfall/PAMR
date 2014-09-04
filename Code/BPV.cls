@@ -34,10 +34,12 @@ End Sub
 '=============================================================
 Public Function IRiskMeasureCalculator_Calculate(valueDate As Date, P As Portfolio, MSP As MarketStateProvider) As Double
     
-    Dim currentValue As Double: currentValue = P.GetNPVByCCY(valueDate, MSP, pCCY)
-    Dim shiftedValue As Double
+    Dim shiftedMSP As MarketStateProvider: Set shiftedMSP = MSP.Clone(): shiftedMSP.ShiftMarketParallel 1
     
-    IRiskMeasureCalculator_Calculate = (currentValue - shiftedValue)
+    Dim currentValue As Double: currentValue = P.GetNPVByCCY(valueDate, MSP, pCCY)
+    Dim shiftedValue As Double: shiftedValue = P.GetNPVByCCY(valueDate, shiftedMSP, pCCY)
+    
+    IRiskMeasureCalculator_Calculate = (shiftedValue - currentValue)
 
 End Function
 

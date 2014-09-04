@@ -75,6 +75,10 @@ End Property
 '   METHODS
 '
 '=============================================================
+
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' Initialization, should be used only in factory module
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 Public Sub Initialize(inTradeDate As Date, inValueDate As Date, inMaturityDate As Date, _
                       inNominal As Double, inCurrency As CCY, inPosition As Position, _
                       inRate As Double, inRecFixingDate As Integer, inRateManager As RateManager)

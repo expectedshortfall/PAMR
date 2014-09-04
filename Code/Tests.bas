@@ -82,7 +82,7 @@ Sub TestMarketState()
     Dim im As InputManager: Set im = New InputManager
     Dim MSP As MarketStateProvider: Set MSP = im.LoadMarketStateProvider(inDate)
     
-    Dim srcMS As MarketState: Set srcMS = MSP.GetMarketStateFromDate(inDate)
+    Dim srcMS As MarketState: Set srcMS = MSP.GetMarketStateFromDate(#5/6/2013#)
     Dim dstMS As MarketState: Set dstMS = srcMS.Clone
     
     dstMS.ShiftMarketParallel 10
@@ -93,4 +93,24 @@ Sub TestMarketState()
     Debug.Print srcMS.ToString
     Debug.Print dstMS.ToString
 
+End Sub
+
+'=============================================================
+'
+'   RISK MEASURES
+'
+'=============================================================
+Sub TestBPV()
+    'VALUATION DATE     2013-02-05
+    Dim inDate As Date: inDate = #2/5/2013#
+    
+    Dim im As InputManager: Set im = New InputManager
+    Dim MP As MarketStateProvider: Set MP = im.LoadMarketStateProvider(inDate)
+    Dim P As Portfolio: Set P = im.LoadPortfolio()
+    
+    Dim bpvPLN As IRiskMeasureCalculator: Set bpvPLN = Factory.CreateBPV(PLN)
+       
+    Debug.Assert Math.Round(bpvPLN.Calculate(inDate, P, MP), 10) = _
+                 Math.Round(12.29145263543, 10)
+    
 End Sub

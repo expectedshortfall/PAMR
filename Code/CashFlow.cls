@@ -20,26 +20,11 @@ Private pAmount As Double
 Private pDiscountFactor As DiscountFactor
 Private pDueDate As Date
 
-
 '=============================================================
 '
 '   METHODS
 '
 '=============================================================
-
-Public Sub Initialize(inOrigin As Origin, inCcy As CCY, _
-                      inValue As Double, inValueDate As Date, _
-                      inDF As DiscountFactor)
-
-    pOrigin = inOrigin
-    pCCY = inCcy
-    pAmount = inValue
-    pDueDate = inValueDate
-    
-    Set pDiscountFactor = inDF
-    
-End Sub
-
 Public Function GetNPV(valueDate As Date, M As MarketState) As Double
     Dim res As Double
     
@@ -62,7 +47,6 @@ End Function
 '   PROPERTIES
 '
 '=============================================================
-
 ''''''''''''''''''''''
 ' Origin property
 ''''''''''''''''''''''
@@ -92,7 +76,21 @@ Public Property Get DueDate() As Date
     DueDate = pDueDate
 End Property
 
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' Initialization, should be used only in factory module
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+Public Sub Initialize(inOrigin As Origin, inCcy As CCY, _
+                      inValue As Double, inValueDate As Date, _
+                      inDF As DiscountFactor)
 
+    pOrigin = inOrigin
+    pCCY = inCcy
+    pAmount = inValue
+    pDueDate = inValueDate
+    
+    Set pDiscountFactor = inDF
+    
+End Sub
 
 
 

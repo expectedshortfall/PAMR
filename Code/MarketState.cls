@@ -27,10 +27,6 @@ Public Property Get SnapshotDate() As Date
     SnapshotDate = pDate
 End Property
 
-Public Sub Initialize(inDate As Date)
-    pDate = inDate
-End Sub
-
 Public Function GetCcyRate(inCcy As CCY) As Double
     If Not pCcyRates.Exists(inCcy) Then
         Err.Raise vbObjectError + 513, "MarketState::GetCcyRate", "Currency: " + Types.CcyToString(inCcy) + " is not present in market"
@@ -145,6 +141,12 @@ Public Function Clone() As MarketState
     
 End Function
 
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' Initialization, should be used only in factory module
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+Public Sub Initialize(inDate As Date)
+    pDate = inDate
+End Sub
 '=============================================================
 '
 '   STRUCTRUAL

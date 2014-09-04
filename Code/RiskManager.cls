@@ -14,6 +14,13 @@ Option Explicit
 '   METHODS
 '
 '=============================================================
+Friend Sub SetValues(ByRef im As InputManager)
+
+End Sub
+
+Friend Sub Run()
+
+End Sub
 
 '=============================================================
 '
