@@ -17,5 +17,8 @@ Option Explicit
 Public Function Calculate(valueDate As Date, P As Portfolio, MP As MarketStateProvider) As Double
 End Function
 
+Public Sub Initialize(param As Variant)
+End Sub
+
 Public Property Get Name() As String
 End Property

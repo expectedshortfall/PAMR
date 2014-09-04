@@ -40,12 +40,40 @@ End Function
 '   RISK MEASURES FACTORY
 '
 '=============================================================
-Public Function CreateBPV(inCcy As CCY) As BPV
-    
-    Set CreateBPV = New BPV
-    CreateBPV.Initialize inCcy
+' TODO: CREATE IT PROGRAMATICALLY
+
+Public Function CreateBPV(inCcy As Variant) As mBPV
+        
+    Set CreateBPV = New mBPV
+    CreateBPV.IRiskMeasureCalculator_Initialize inCcy
 
 End Function
+
+Public Function CreateRotation(inCcy As Variant) As mRotation
+    
+    Set CreateRotation = New mRotation
+    CreateRotation.IRiskMeasureCalculator_Initialize inCcy
+
+End Function
+
+Public Function CreateStressTest(param As Variant) As mStressTest
+    Set CreateStressTest = New mStressTest
+End Function
+
+Public Function CreateVaR(alpha As Double) As mVAR
+    
+    Set CreateVaR = New mVAR
+    CreateVaR.IRiskMeasureCalculator_Initialize alpha
+
+End Function
+
+Public Function CreateES(alpha As Double) As mES
+    
+    Set CreateES = New mES
+    CreateES.IRiskMeasureCalculator_Initialize alpha
+
+End Function
+
 
 '=============================================================
 '

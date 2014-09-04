@@ -114,3 +114,18 @@ Sub TestBPV()
                  Math.Round(12.29145263543, 10)
     
 End Sub
+
+
+Sub TestTypes()
+    Dim r As Range: Set r = Range("inputAreaStart")
+    Dim rm As IRiskMeasureCalculator
+    
+    While (Not r.Value = Empty)
+            
+            Set rm = Application.Run("Factory.Create" + r.Value, r.Offset(0, 1).Value)
+            Debug.Print rm.Name
+                        
+            Set r = r.Offset(1, 0)
+    Wend
+
+End Sub

@@ -34,8 +34,8 @@ End Property
 '=============================================================
 Private Sub Class_Initialize()
     
-    Worksheets("RAPORT").Range("G3:G13").Clear
-    Worksheets("StressTest").Range("C15:BH15").ClearContents
+    Worksheets("RAPORT").Range("outputArea").ClearContents
+    Worksheets("StressTest").Range("sensivityArea").ClearContents
     
 End Sub
 
@@ -44,5 +44,5 @@ Private Sub Class_Terminate()
 End Sub
 
 Private Sub Write_out_data()
-    Cells(24, 3).Value = elapsed_time_
+    Worksheets("RAPORT").Range("elapsedTime").Value = elapsed_time_
 End Sub
