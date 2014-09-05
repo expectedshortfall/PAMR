@@ -51,7 +51,7 @@ End Sub
 
 Private Sub ReadData()
     
-    valuationDate = Range("valuationDate").Value
+    valuationDate = ThisWorkbook.Worksheets("RAPORT").Range("valuationDate").Value
     
     Set MSP = LoadMarketStateProvider(valuationDate)
     Set P = LoadPortfolio

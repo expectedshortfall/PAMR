@@ -38,7 +38,7 @@ Public Function IInstrument_GetCashFlows(ValueDate As Date, MP As MarketStatePro
     
     Dim res As CashFlowCollection: Set res = New CashFlowCollection
     
-    If ValueDate >= pSettlementDate Or ValueDate <= pTradeDate Then
+    If ValueDate <= pTradeDate Then
         Set IInstrument_GetCashFlows = res: Exit Function
     End If
     

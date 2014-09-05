@@ -69,7 +69,7 @@ Private Function DiscountCashFlows(ValueDate As Date, MP As MarketStateProvider,
     Dim cf As CashFlow
     
     For Each cf In cashFlows
-        DiscountCashFlows = DiscountCashFlows + cf.GetNPV(ValueDate, MP.GetCurrentMarketState)
+        DiscountCashFlows = DiscountCashFlows + cf.GetNPVinPLN(ValueDate, MP.GetCurrentMarketState)
     Next
 
 End Function

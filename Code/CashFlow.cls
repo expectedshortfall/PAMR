@@ -30,6 +30,8 @@ Public Function GetNPV(ValueDate As Date, M As MarketState) As Double
     
     If ValueDate <= Me.DueDate Then
         res = Me.Amount * pDiscountFactor.Calculate(ValueDate, Me.DueDate, M)
+    Else
+        res = Me.Amount
     End If
         
     GetNPV = res
@@ -50,7 +52,7 @@ End Function
 ''''''''''''''''''''''
 ' Origin property
 ''''''''''''''''''''''
-Public Property Get Origin() As String
+Public Property Get Origin() As Origin
     Origin = pOrigin
 End Property
 
