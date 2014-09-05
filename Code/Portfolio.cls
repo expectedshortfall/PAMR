@@ -22,24 +22,24 @@ Private pInstruments As InstrumentCollection
 '   METHODS
 '
 '=============================================================
-Public Function GetNPV(valueDate As Date, ByRef MP As MarketStateProvider) As Double
+Public Function GetNPV(ValueDate As Date, ByRef MP As MarketStateProvider) As Double
     
-    SetCashFlows valueDate, MP
-    GetNPV = DiscountCashFlows(valueDate, MP, pCashFlows)
+    SetCashFlows ValueDate, MP
+    GetNPV = DiscountCashFlows(ValueDate, MP, pCashFlows)
     
 End Function
 
-Public Function GetNPVByCCY(valueDate As Date, MP As MarketStateProvider, cur As CCY) As Double
+Public Function GetNPVByCCY(ValueDate As Date, MP As MarketStateProvider, cur As CCY) As Double
     
-    SetCashFlows valueDate, MP
-    GetNPVByCCY = DiscountCashFlows(valueDate, MP, pCashFlows.FilterByCCY(cur))
+    SetCashFlows ValueDate, MP
+    GetNPVByCCY = DiscountCashFlows(ValueDate, MP, pCashFlows.FilterByCCY(cur))
 
 End Function
 
-Public Function GetNPVByOrigin(valueDate As Date, MP As MarketStateProvider, inOrigin As Origin) As Double
+Public Function GetNPVByOrigin(ValueDate As Date, MP As MarketStateProvider, inOrigin As Origin) As Double
         
-    SetCashFlows valueDate, MP
-    GetNPVByOrigin = DiscountCashFlows(valueDate, MP, pCashFlows.FilterByOrigin(inOrigin))
+    SetCashFlows ValueDate, MP
+    GetNPVByOrigin = DiscountCashFlows(ValueDate, MP, pCashFlows.FilterByOrigin(inOrigin))
 
 End Function
 
@@ -56,20 +56,20 @@ End Sub
 '   STRUCTURAL
 '
 '=============================================================
-Private Function SetCashFlows(valueDate As Date, MP As MarketStateProvider)
+Private Function SetCashFlows(ValueDate As Date, MP As MarketStateProvider)
     Dim inst As IInstrument
     pCashFlows.Clear
     
     For Each inst In pInstruments
-        Call pCashFlows.AddCashFlows(inst.GetCashFlows(valueDate, MP))
+        Call pCashFlows.AddCashFlows(inst.GetCashFlows(ValueDate, MP))
     Next
 End Function
 
-Private Function DiscountCashFlows(valueDate As Date, MP As MarketStateProvider, cashFlows As CashFlowCollection)
+Private Function DiscountCashFlows(ValueDate As Date, MP As MarketStateProvider, cashFlows As CashFlowCollection)
     Dim cf As CashFlow
     
     For Each cf In cashFlows
-        DiscountCashFlows = DiscountCashFlows + cf.GetNPV(valueDate, MP.GetCurrentMarketState)
+        DiscountCashFlows = DiscountCashFlows + cf.GetNPV(ValueDate, MP.GetCurrentMarketState)
     Next
 
 End Function

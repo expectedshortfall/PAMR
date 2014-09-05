@@ -8,13 +8,14 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
-Implements IRiskMeasureCalculator
+Implements IRiskMeasure
 
 '=============================================================
 '
 '   PRIVATE VARIABLES
 '
 '=============================================================
+Dim pValue As Double
 Dim pName As String
 Dim pCCY As CCY
 
@@ -25,31 +26,38 @@ Dim pCCY As CCY
 '=============================================================
 '=============================================================
 '
-'   IMPLEMENTING IRiskMeasureCalculator INTERFACE
+'   IMPLEMENTING IRiskMeasure INTERFACE
 '
 '=============================================================
-Public Function IRiskMeasureCalculator_Calculate(valueDate As Date, P As Portfolio, MSP As MarketStateProvider) As Double
+Public Function IRiskMeasure_Calculate(ds As IDataSource)
+    Dim MSP As MarketStateProvider: Set MSP = ds.MarketStateProvider
+    Dim P As Portfolio: Set P = ds.Portfolio
     
     Dim shiftedMSP As MarketStateProvider: Set shiftedMSP = MSP.Clone(): shiftedMSP.ShiftMarketParallel 1
     
-    Dim currentValue As Double: currentValue = P.GetNPVByCCY(valueDate, MSP, pCCY)
-    Dim shiftedValue As Double: shiftedValue = P.GetNPVByCCY(valueDate, shiftedMSP, pCCY)
+    Dim currentValue As Double: currentValue = P.GetNPVByCCY(ds.ValueDate, MSP, pCCY)
+    Dim shiftedValue As Double: shiftedValue = P.GetNPVByCCY(ds.ValueDate, shiftedMSP, pCCY)
     
-    IRiskMeasureCalculator_Calculate = (shiftedValue - currentValue)
+    pValue = (shiftedValue - currentValue)
 
 End Function
-Public Sub IRiskMeasureCalculator_Initialize(param As Variant)
+
+Public Sub IRiskMeasure_Initialize(param As Variant)
     
     If Not VarType(param) = vbString Then
-        Err.Raise vbObject + 513, "BPV::IRiskMeasureCalculator_Initialize", "Param is not a string"
+        Err.Raise vbObject + 513, "BPV::IRiskMeasure_Initialize", "Param is not a string"
     End If
     
     pCCY = Types.StringToCCY(CStr(param))
-
+    pName = pName + param
 End Sub
 
-Public Property Get IRiskMeasureCalculator_Name() As String
-    IRiskMeasureCalculator_Name = pName
+Public Property Get IRiskMeasure_Name() As String
+    IRiskMeasure_Name = pName
+End Property
+
+Public Property Get IRiskMeasure_Value() As Double
+    IRiskMeasure_Value = pValue
 End Property
 
 '=============================================================
@@ -58,5 +66,5 @@ End Property
 '
 '=============================================================
 Private Sub Class_Initialize()
-    pName = "BPV_" + Types.CcyToString(pCCY)
+    pName = "BPV_"
 End Sub

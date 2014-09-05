@@ -3,16 +3,19 @@ Option Explicit
 
 Sub TestNPV()
     'VALUATION DATE     2013-02-05
-    Dim im As InputManager: Set im = New InputManager
+    Dim inDate As Date: inDate = #2/5/2013#
+    Dim IM As InputManager: Set IM = New InputManager
+        
+    Debug.Assert IM.GetValuationDate = inDate
     
-    Dim MP As MarketStateProvider: Set MP = im.LoadMarketStateProvider(#2/5/2013#)
-    Dim v As Portfolio: Set v = im.LoadPortfolio()
+    Dim MP As MarketStateProvider: Set MP = IM.GetMarketStateProvider
+    Dim v As Portfolio: Set v = IM.GetPortfolio
     
-    Dim NPV As Double: NPV = v.GetNPVByCCY(#2/5/2013#, MP, CCY.PLN)
+    Dim NPV As Double: NPV = v.GetNPVByCCY(inDate, MP, CCY.PLN)
     Debug.Assert Math.Round(NPV, 10) = _
                  Math.Round(284.44105901793, 10)
                  
-    NPV = v.GetNPVByOrigin(#2/5/2013#, MP, FRA)
+    NPV = v.GetNPVByOrigin(inDate, MP, FRA)
     Debug.Assert Math.Round(NPV, 10) = _
                  Math.Round(284.44105901793, 10)
 
@@ -41,10 +44,12 @@ Sub TestDiscountFactor()
     
     Dim inDate As Date: inDate = #2/5/2013#
     Dim forwardDate As Date: forwardDate = #4/2/2013#
-    
-    Dim im As InputManager: Set im = New InputManager
-    Dim MSP As MarketStateProvider: Set MSP = im.LoadMarketStateProvider(inDate)
-    Dim MS As MarketState: Set MS = MSP.GetMarketStateFromDate(inDate)
+    Dim IM As InputManager: Set IM = New InputManager
+        
+    Debug.Assert IM.GetValuationDate = inDate
+        
+    Dim MSP As MarketStateProvider: Set MSP = IM.GetMarketStateProvider
+    Dim MS As MarketState: Set MS = MSP.GetCurrentMarketState
         
     Dim DF As DiscountFactor: Set DF = Factory.CreateRateManager("PLN", "PL3", cAct365).CreateDiscountFactor()
     
@@ -63,25 +68,27 @@ Sub TestForwardRate()
     Dim startDate As Date: startDate = #4/2/2013#
     Dim endDate As Date: endDate = #7/2/2013#
     
-    Dim im As InputManager: Set im = New InputManager
-    Dim MSP As MarketStateProvider: Set MSP = im.LoadMarketStateProvider(inDate)
-    Dim MS As MarketState: Set MS = MSP.GetMarketStateFromDate(inDate)
+    Dim IM As InputManager: Set IM = New InputManager
+    Debug.Assert IM.GetValuationDate = inDate
         
-    Dim rm As RateManager: Set rm = Factory.CreateRateManager("PLN", "PL3", cAct365)
+    Dim MSP As MarketStateProvider: Set MSP = IM.GetMarketStateProvider
+    Dim MS As MarketState: Set MS = MSP.GetCurrentMarketState
+        
+    Dim RM As RateManager: Set RM = Factory.CreateRateManager("PLN", "PL3", cAct365)
     
-    Debug.Assert Math.Round(rm.GetForwardRate(inDate, startDate, endDate, MS), 12) = _
+    Debug.Assert Math.Round(RM.GetForwardRate(inDate, startDate, endDate, MS), 12) = _
                  Math.Round(323.125845894649, 12)
     
 End Sub
 
 Sub TestMarketState()
     'VALUATION DATE     2013-02-05
-    
     Dim inDate As Date: inDate = #2/5/2013#
+    Dim IM As InputManager: Set IM = New InputManager
     
-    Dim im As InputManager: Set im = New InputManager
-    Dim MSP As MarketStateProvider: Set MSP = im.LoadMarketStateProvider(inDate)
+    Debug.Assert IM.GetValuationDate = inDate
     
+    Dim MSP As MarketStateProvider: Set MSP = IM.GetMarketStateProvider
     Dim srcMS As MarketState: Set srcMS = MSP.GetMarketStateFromDate(#5/6/2013#)
     Dim dstMS As MarketState: Set dstMS = srcMS.Clone
     
@@ -103,14 +110,12 @@ End Sub
 Sub TestBPV()
     'VALUATION DATE     2013-02-05
     Dim inDate As Date: inDate = #2/5/2013#
+    Dim IM As InputManager: Set IM = New InputManager
+    Dim RM As RiskManager: Set RM = New RiskManager: RM.SetValues IM
     
-    Dim im As InputManager: Set im = New InputManager
-    Dim MP As MarketStateProvider: Set MP = im.LoadMarketStateProvider(inDate)
-    Dim P As Portfolio: Set P = im.LoadPortfolio()
-    
-    Dim bpvPLN As IRiskMeasureCalculator: Set bpvPLN = Factory.CreateBPV(PLN)
+    Dim bpvPLN As IRiskMeasure: Set bpvPLN = Factory.CreateBPV("PLN")
        
-    Debug.Assert Math.Round(bpvPLN.Calculate(inDate, P, MP), 10) = _
+    Debug.Assert Math.Round(bpvPLN.Calculate(RM), 10) = _
                  Math.Round(12.29145263543, 10)
     
 End Sub
@@ -118,12 +123,12 @@ End Sub
 
 Sub TestTypes()
     Dim r As Range: Set r = Range("inputAreaStart")
-    Dim rm As IRiskMeasureCalculator
+    Dim RM As IRiskMeasure
     
     While (Not r.Value = Empty)
             
-            Set rm = Application.Run("Factory.Create" + r.Value, r.Offset(0, 1).Value)
-            Debug.Print rm.Name
+            Set RM = Application.Run("Factory.Create" + r.Value, r.Offset(0, 1).Value)
+            Debug.Print RM.Name
                         
             Set r = r.Offset(1, 0)
     Wend

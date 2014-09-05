@@ -8,13 +8,14 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
-Implements IRiskMeasureCalculator
+Implements IRiskMeasure
 
 '=============================================================
 '
 '   PRIVATE VARIABLES
 '
 '=============================================================
+Dim pValue As Double
 Dim pName As String
 
 '=============================================================
@@ -25,19 +26,23 @@ Dim pName As String
 
 '=============================================================
 '
-'   IMPLEMENTING IRiskMeasureCalculator INTERFACE
+'   IMPLEMENTING IRiskMeasure INTERFACE
 '
 '=============================================================
-Public Function IRiskMeasureCalculator_Calculate(valueDate As Date, P As Portfolio, MP As MarketStateProvider) As Double
+Public Function IRiskMeasure_Calculate(dataSource As IDataSource)
 
 End Function
 
-Public Sub IRiskMeasureCalculator_Initialize(param As Variant)
+Public Sub IRiskMeasure_Initialize(param As Variant)
 
 End Sub
 
-Public Property Get IRiskMeasureCalculator_Name() As String
-    IRiskMeasureCalculator_Name = pName
+Public Property Get IRiskMeasure_Name() As String
+    IRiskMeasure_Name = pName
+End Property
+
+Public Property Get IRiskMeasure_Value() As Double
+    IRiskMeasure_Value = pValue
 End Property
 
 '=============================================================

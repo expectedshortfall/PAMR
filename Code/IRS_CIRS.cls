@@ -23,7 +23,7 @@ Dim pRateManager As RateManager
 '   IMPLEMENTING IINSTRUMENT INTERFACE
 '
 '=============================================================
-Public Function IInstrument_GetCashFlows(valueDate As Date, ByRef MP As MarketStateProvider) As CashFlowCollection
+Public Function IInstrument_GetCashFlows(ValueDate As Date, ByRef MP As MarketStateProvider) As CashFlowCollection
     Dim res As CashFlowCollection: Set res = New CashFlowCollection
         
     Set IInstrument_GetCashFlows = res

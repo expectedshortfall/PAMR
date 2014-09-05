@@ -25,20 +25,20 @@ Private pDueDate As Date
 '   METHODS
 '
 '=============================================================
-Public Function GetNPV(valueDate As Date, M As MarketState) As Double
+Public Function GetNPV(ValueDate As Date, M As MarketState) As Double
     Dim res As Double
     
-    If valueDate <= Me.DueDate Then
-        res = Me.Amount * pDiscountFactor.Calculate(valueDate, Me.DueDate, M)
+    If ValueDate <= Me.DueDate Then
+        res = Me.Amount * pDiscountFactor.Calculate(ValueDate, Me.DueDate, M)
     End If
         
     GetNPV = res
     
 End Function
 
-Public Function GetNPVinPLN(valueDate As Date, M As MarketState) As Double
+Public Function GetNPVinPLN(ValueDate As Date, M As MarketState) As Double
     
-    GetNPVinPLN = M.GetCcyRate(pCCY) * GetNPV(valueDate, M)
+    GetNPVinPLN = M.GetCcyRate(pCCY) * GetNPV(ValueDate, M)
     
 End Function
 

@@ -18,6 +18,7 @@ Private pDcc As DayCountConvention
 Private pDiscountCurveName As String
 Private pForwardCurveName As String
 
+
 Public Sub Initialize(inDiscountCurveName As String, inForwardCurveName As String, inDcc As DayCountConvention)
     
     pDiscountCurveName = inDiscountCurveName

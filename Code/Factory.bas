@@ -45,14 +45,14 @@ End Function
 Public Function CreateBPV(inCcy As Variant) As mBPV
         
     Set CreateBPV = New mBPV
-    CreateBPV.IRiskMeasureCalculator_Initialize inCcy
+    CreateBPV.IRiskMeasure_Initialize inCcy
 
 End Function
 
 Public Function CreateRotation(inCcy As Variant) As mRotation
     
     Set CreateRotation = New mRotation
-    CreateRotation.IRiskMeasureCalculator_Initialize inCcy
+    CreateRotation.IRiskMeasure_Initialize inCcy
 
 End Function
 
@@ -63,14 +63,14 @@ End Function
 Public Function CreateVaR(alpha As Double) As mVAR
     
     Set CreateVaR = New mVAR
-    CreateVaR.IRiskMeasureCalculator_Initialize alpha
+    CreateVaR.IRiskMeasure_Initialize alpha
 
 End Function
 
 Public Function CreateES(alpha As Double) As mES
     
     Set CreateES = New mES
-    CreateES.IRiskMeasureCalculator_Initialize alpha
+    CreateES.IRiskMeasure_Initialize alpha
 
 End Function
 

@@ -34,10 +34,10 @@ Dim pRateManager As RateManager
 '   IMPLEMENTING IINSTRUMENT INTERFACE
 '
 '=============================================================
-Public Function IInstrument_GetCashFlows(valueDate As Date, ByRef MP As MarketStateProvider) As CashFlowCollection
+Public Function IInstrument_GetCashFlows(ValueDate As Date, ByRef MP As MarketStateProvider) As CashFlowCollection
     Dim res As CashFlowCollection: Set res = New CashFlowCollection
     
-    If valueDate >= pValueDate Or valueDate <= pTradeDate Then
+    If ValueDate >= pValueDate Or ValueDate <= pTradeDate Then
         Set IInstrument_GetCashFlows = res: Exit Function
     End If
     
@@ -45,8 +45,8 @@ Public Function IInstrument_GetCashFlows(valueDate As Date, ByRef MP As MarketSt
     Dim forwardRate As Double
     Dim cfAmount  As Double
     
-    If valueDate < pFixingDate Then
-        forwardRate = pRateManager.GetForwardRate(valueDate, pValueDate, pMaturityDate, MP.GetCurrentMarketState)
+    If ValueDate < pFixingDate Then
+        forwardRate = pRateManager.GetForwardRate(ValueDate, pValueDate, pMaturityDate, MP.GetCurrentMarketState)
     Else
         forwardRate = pRateManager.GetRateForTenor(p3M, MP.GetMarketStateFromDate(pFixingDate))
     End If

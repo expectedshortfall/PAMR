@@ -14,8 +14,8 @@ Option Explicit
 '   PRIVATE VARIABLES
 '
 '=============================================================
-Private data_in As InputManager
-Private data_out As OutputManager
+Private IM As InputManager
+Private OM As OutputManager
 Private app As RiskManager
 Private watch As StopWatch
 
@@ -30,8 +30,8 @@ Public Sub Run()
     Call app.Run
     Call watch.Stop_Timer
 
-    data_out.RegisterValues app
-    data_out.Elapsed_Time = watch.Elapsed_Time
+    OM.RegisterValues app
+    OM.ElapsedTime = watch.Elapsed_Time
         
 End Sub
 
@@ -43,14 +43,17 @@ End Sub
 '=============================================================
 Private Sub Class_Initialize()
     
-    Set data_in = New InputManager
-    Set data_out = New OutputManager
+    Set watch = New StopWatch
+    Set OM = New OutputManager
     Set app = New RiskManager:
     
-    Call data_out.SetValues(data_in)
-    Call app.SetValues(data_in)
+    ' We would like to know how long does the data loading take
+    watch.Start_Timer
+    Set IM = New InputManager
+    watch.Stop_Timer
     
-    Set watch = New StopWatch
+    Call OM.SetValues(IM): OM.DataLoadingTime = watch.Elapsed_Time: watch.Reset_Timer
+    Call app.SetValues(IM)
        
 End Sub
 
@@ -58,8 +61,8 @@ Private Sub Class_Terminate()
 
     Set watch = Nothing
     Set app = Nothing
-    Set data_out = Nothing
-    Set data_in = Nothing
+    Set OM = Nothing
+    Set IM = Nothing
 
 End Sub
 

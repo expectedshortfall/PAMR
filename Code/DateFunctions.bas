@@ -196,9 +196,9 @@ End Function
 '   DATE SHIFTS
 '
 '=============================================================
-Public Function GetFixingDate(valueDate As Date, shift As Integer)
+Public Function GetFixingDate(ValueDate As Date, shift As Integer)
     Dim i As Integer
-    Dim res As Date: res = valueDate
+    Dim res As Date: res = ValueDate
     
     For i = 1 To -shift
         res = PreviousBusinessDay(res)

@@ -14,7 +14,7 @@ Option Explicit
 '   PUBLIC IINTERFACE INTERFACE
 '
 '=============================================================
-Public Function GetCashFlows(valueDate As Date, MP As MarketStateProvider) As CashFlowCollection
+Public Function GetCashFlows(ValueDate As Date, MP As MarketStateProvider) As CashFlowCollection
 End Function
 
 Public Property Get Name() As String
