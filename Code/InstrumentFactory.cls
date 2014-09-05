@@ -58,7 +58,7 @@ Public Sub GetFRA(ByRef instruments As InstrumentCollection, ws As Worksheet)
         Loop
     End With
     
-    Debug.Print "Loading FRAs has finished successfully"
+    'Debug.Print "Loading FRAs has finished successfully"
 
 End Sub
 
@@ -84,7 +84,7 @@ Public Sub GetFXSpot(ByRef instruments As InstrumentCollection, ws As Worksheet)
         Loop
     End With
     
-    Debug.Print "Loading FXSpots has finished successfully"
+    'Debug.Print "Loading FXSpots has finished successfully"
 
 End Sub
 

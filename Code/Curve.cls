@@ -178,7 +178,7 @@ Private Function GetInterpolatedRate(rateDate As Date) As Double
     
 End Function
 
-Private Function Interpolate(t As Date, T_i As Date, T_j As Date, r_i As Double, r_j As Double)
-    Interpolate = r_i + (t - T_i) / (T_j - T_i) * (r_j - r_i)
+Private Function Interpolate(T As Date, T_i As Date, T_j As Date, r_i As Double, r_j As Double)
+    Interpolate = r_i + (T - T_i) / (T_j - T_i) * (r_j - r_i)
 End Function
 

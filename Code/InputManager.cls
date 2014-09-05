@@ -10,7 +10,7 @@ Attribute VB_Exposed = False
 Option Explicit
 
 Private MSP As MarketStateProvider
-Private P As Portfolio
+Private p As Portfolio
 Private valuationDate As Date
 
 '=============================================================
@@ -23,7 +23,7 @@ Public Function GetMarketStateProvider() As MarketStateProvider
 End Function
 
 Public Function GetPortfolio() As Portfolio
-    Set GetPortfolio = P
+    Set GetPortfolio = p
 End Function
 
 Public Function GetValuationDate() As Date
@@ -54,7 +54,7 @@ Private Sub ReadData()
     valuationDate = ThisWorkbook.Worksheets("RAPORT").Range("valuationDate").Value
     
     Set MSP = LoadMarketStateProvider(valuationDate)
-    Set P = LoadPortfolio
+    Set p = LoadPortfolio
 
 End Sub
 

@@ -61,12 +61,12 @@ Public Function LoadMarketStateProvider(inDate As Date) As MarketStateProvider
                 'Get reference rates only if there were rates in rates.xls for the same date
                 If Not IsError(FindIndexForDate(currentDate, wsRef)) Then
                     
-                    Dim k As Integer: k = FindIndexForDate(currentDate, wsRef)
+                    Dim K As Integer: K = FindIndexForDate(currentDate, wsRef)
                     
                     j = 2 'start reading from second columns
                     
-                    While Not wsRef.Cells(k, j).Value = Empty
-                        .AddCurve GetCurve(wsRef, k, j, False)
+                    While Not wsRef.Cells(K, j).Value = Empty
+                        .AddCurve GetCurve(wsRef, K, j, False)
                     Wend
                 
                 End If

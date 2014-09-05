@@ -92,7 +92,7 @@ End Function
 Private Function EasterUSNO(yyyy As Long) As Long
     Dim c As Long
     Dim N As Long
-    Dim k As Long
+    Dim K As Long
     Dim i As Long
     Dim j As Long
     Dim L As Long
@@ -101,8 +101,8 @@ Private Function EasterUSNO(yyyy As Long) As Long
     
     c = yyyy \ 100
     N = yyyy - 19 * (yyyy \ 19)
-    k = (c - 17) \ 25
-    i = c - c \ 4 - (c - k) \ 3 + 19 * N + 15
+    K = (c - 17) \ 25
+    i = c - c \ 4 - (c - K) \ 3 + 19 * N + 15
     i = i - 30 * (i \ 30)
     i = i - (i \ 28) * (1 - (i \ 28) * (29 \ (i + 1)) * ((21 - N) \ 11))
     j = yyyy + yyyy \ 4 + i + 2 - c + c \ 4

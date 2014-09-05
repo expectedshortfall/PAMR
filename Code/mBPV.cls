@@ -32,11 +32,11 @@ Dim pCCY As CCY
 Public Function IRiskMeasure_Calculate(ds As IDataSource)
     
     Dim MSP As MarketStateProvider: Set MSP = ds.MarketStateProvider
-    Dim P As Portfolio: Set P = ds.Portfolio
+    Dim p As Portfolio: Set p = ds.Portfolio
     Dim shiftedMSP As MarketStateProvider: Set shiftedMSP = ds.MarketStateProviderShiftedInParallelBy1Bp
     
-    Dim currentValue As Double: currentValue = P.GetNPVByCCY(ds.ValueDate, MSP, pCCY)
-    Dim shiftedValue As Double: shiftedValue = P.GetNPVByCCY(ds.ValueDate, shiftedMSP, pCCY)
+    Dim currentValue As Double: currentValue = p.GetNPVByCCY(ds.ValueDate, MSP, pCCY)
+    Dim shiftedValue As Double: shiftedValue = p.GetNPVByCCY(ds.ValueDate, shiftedMSP, pCCY)
     
     pValue = (shiftedValue - currentValue)
 
