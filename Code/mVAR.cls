@@ -18,6 +18,9 @@ Implements IRiskMeasure
 Dim pValue As Double
 Dim pName As String
 
+Dim pAlpha As Double
+Dim pIndex As Integer
+Const pHistoryLength As Integer = 250
 '=============================================================
 '
 '   METHODS
@@ -34,7 +37,14 @@ Public Function IRiskMeasure_Calculate(dataSource As IDataSource)
 End Function
 
 Public Sub IRiskMeasure_Initialize(param As Variant)
-
+    
+    If Not VarType(param) = vbDouble Then
+        Err.Raise vbObject + 513, "VaR::IRiskMeasure_Initialize", "Param is not a double"
+    End If
+    
+    pAlpha = param
+    pIndex = WorksheetFunction.Ceiling(pAlpha * pHistoryLength, 1)
+    
 End Sub
 
 Public Property Get IRiskMeasure_Name() As String

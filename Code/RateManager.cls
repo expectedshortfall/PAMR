@@ -34,6 +34,13 @@ Public Function CreateDiscountFactor() As DiscountFactor
 
 End Function
 
+Public Function CreateCompoundFactor() As CompoundFactor
+    
+    Set CreateCompoundFactor = New CompoundFactor
+    CreateCompoundFactor.Initialize curveName:=pForwardCurveName, dcc:=pDcc
+    
+End Function
+
 Public Function GetRateForTenor(tenor As Period, ByRef M As MarketState) As Double
     GetRateForTenor = M.GetCurve(pForwardCurveName).GetRateForTenor(tenor)
 End Function

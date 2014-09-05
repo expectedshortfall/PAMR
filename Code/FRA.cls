@@ -35,13 +35,13 @@ Dim pRateManager As RateManager
 '
 '=============================================================
 Public Function IInstrument_GetCashFlows(ValueDate As Date, ByRef MP As MarketStateProvider) As CashFlowCollection
+    
     Dim res As CashFlowCollection: Set res = New CashFlowCollection
     
     If ValueDate >= pValueDate Or ValueDate <= pTradeDate Then
         Set IInstrument_GetCashFlows = res: Exit Function
     End If
-    
-    Dim cf As CashFlow: Set cf = New CashFlow
+        
     Dim forwardRate As Double
     Dim cfAmount  As Double
     
@@ -58,9 +58,7 @@ Public Function IInstrument_GetCashFlows(ValueDate As Date, ByRef MP As MarketSt
     
     cfAmount = acc * pNominal * fdf * IIf(pPosition = Buy, 1, -1)
     
-    Call cf.Initialize(pOrigin, pCurrency, cfAmount, pValueDate, pRateManager.CreateDiscountFactor)
-    
-    res.AddCashFlow cf
+    res.AddCashFlow Factory.CreateCashFlow(pOrigin, pCurrency, cfAmount, pValueDate, pRateManager.CreateDiscountFactor)
     
     Set IInstrument_GetCashFlows = res
 
@@ -105,4 +103,8 @@ End Sub
 Private Sub Class_Initialize()
     pOrigin = Origin.FRA
     pName = "FRA"
+End Sub
+
+Private Sub Class_Terminate()
+    Set pRateManager = Nothing
 End Sub
