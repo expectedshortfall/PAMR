@@ -20,6 +20,10 @@ End Property
 Public Property Get MarketStateProvider() As MarketStateProvider
 End Property
 
+Public Property Get MarketStateProviderShiftedInParallelBy1Bp() As MarketStateProvider
+End Property
+
 Public Property Get Portfolio() As Portfolio
 End Property
+
 

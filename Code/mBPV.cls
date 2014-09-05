@@ -19,6 +19,8 @@ Dim pValue As Double
 Dim pName As String
 Dim pCCY As CCY
 
+Dim sw As StopWatch
+
 '=============================================================
 '
 '   METHODS
@@ -30,10 +32,14 @@ Dim pCCY As CCY
 '
 '=============================================================
 Public Function IRiskMeasure_Calculate(ds As IDataSource)
+    
     Dim MSP As MarketStateProvider: Set MSP = ds.MarketStateProvider
     Dim P As Portfolio: Set P = ds.Portfolio
     
-    Dim shiftedMSP As MarketStateProvider: Set shiftedMSP = MSP.Clone(): shiftedMSP.ShiftMarketParallel 1
+    sw.Start_Timer
+    Dim shiftedMSP As MarketStateProvider: Set shiftedMSP = ds.MarketStateProviderShiftedInParallelBy1Bp
+    sw.Stop_Timer
+    Debug.Print sw.Elapsed_Time
     
     Dim currentValue As Double: currentValue = P.GetNPVByCCY(ds.ValueDate, MSP, pCCY)
     Dim shiftedValue As Double: shiftedValue = P.GetNPVByCCY(ds.ValueDate, shiftedMSP, pCCY)
@@ -50,6 +56,7 @@ Public Sub IRiskMeasure_Initialize(param As Variant)
     
     pCCY = Types.StringToCCY(CStr(param))
     pName = pName + param
+
 End Sub
 
 Public Property Get IRiskMeasure_Name() As String
@@ -67,4 +74,9 @@ End Property
 '=============================================================
 Private Sub Class_Initialize()
     pName = "BPV_"
+    Set sw = New StopWatch
+End Sub
+
+Private Sub Class_Terminate()
+    Set sw = Nothing
 End Sub

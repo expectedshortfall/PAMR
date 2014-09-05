@@ -17,8 +17,10 @@ Implements IDataSource
 '=============================================================
 Private pPortfolio As Portfolio
 Private pMSP As MarketStateProvider
+Private pMSP_BPV As MarketStateProvider
 Private pVD As Date
 Private pRiskMeasureCollection As IRiskMeasureCollection
+
 
 '=============================================================
 '
@@ -30,10 +32,30 @@ Public Property Get IDataSource_ValueDate() As Date
 End Property
 
 Public Property Get IDataSource_MarketStateProvider() As MarketStateProvider
+    If pMSP Is Nothing Then
+        Err.Raise vbObject + 513, "RiskManager::MarketStateProvider", "MarketStateProvider is set to nothing"
+    End If
+    
     Set IDataSource_MarketStateProvider = pMSP
+
+End Property
+
+Public Property Get IDataSource_MarketStateProviderShiftedInParallelBy1Bp() As MarketStateProvider
+    
+    If pMSP_BPV Is Nothing Then
+        Set pMSP_BPV = Me.IDataSource_MarketStateProvider.Clone(): pMSP_BPV.ShiftMarketParallel 1
+    End If
+    
+    Set IDataSource_MarketStateProviderShiftedInParallelBy1Bp = pMSP_BPV
+    
 End Property
 
 Public Property Get IDataSource_Portfolio() As Portfolio
+    
+    If pPortfolio Is Nothing Then
+        Err.Raise vbObject + 513, "RiskManager::Portfolio", "Portfolio is set to Nothing"
+    End If
+    
     Set IDataSource_Portfolio = pPortfolio
 End Property
 
@@ -86,4 +108,5 @@ Private Sub Class_Terminate()
     Set pPortfolio = Nothing
     Set pMSP = Nothing
     Set pRiskMeasureCollection = Nothing
+    Set pMSP_BPV = Nothing
 End Sub
