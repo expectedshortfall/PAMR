@@ -146,4 +146,40 @@ End Function
 '    Loop
 'End Function
 
+'http://www.riskglossary.com/link/garman_kohlhagen_1983.htm
+' ******************************************************************************************************
+'       VEGA W MODELU B-S
+' ******************************************************************************************************
+'Function vega(o As COption, payoffType As String) As Double
+'    Dim theta As Integer
+'    theta = GetTheta(payoffType)
+'    vega = Math.Exp(-o.q * o.T) * o.S0 * Math.Sqr(o.T) * WorksheetFunction.NormDist(d1(o), 0, 1, False)
+'End Function
+
+'Option parameters
+
+' Public S0 As Double
+' Public sigma As Double
+' Public r As Double
+' Public q As Double
+' Public K As Double
+' Public T As Double
+' Public N As Integer
+'
+'
+'Property Get h() As Double
+'    h = T / N
+'End Property
+'
+'Property Get m() As Double
+'    m = Exp(r * h())
+'End Property
+'
+'Property Get v() As Double
+'    v = Exp(sigma ^ 2 * h())
+'End Property
+'
+'Property Get alpha() As Double
+'    alpha = r - 0.5 * sigma ^ 2
+'End Property
 
