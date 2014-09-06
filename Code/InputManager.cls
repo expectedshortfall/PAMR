@@ -32,7 +32,6 @@ End Function
 
 Public Sub LoadRiskMeasures(inRiskManager As RiskManager)
     Dim r As Range: Set r = Range("inputAreaStart")
-    Dim RM As IRiskMeasure
     
     While (Not r.Value = Empty)
         inRiskManager.AddRiskMeasure Application.Run("Factory.Create" + r.Value, r.Offset(0, 1).Value)

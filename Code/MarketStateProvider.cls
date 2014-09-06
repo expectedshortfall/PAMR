@@ -127,7 +127,7 @@ Public Sub ShiftCurveOnTenor(curveName As String, inTenor As Period, shift As Do
     
     Dim myCurve As Curve: Set myCurve = Types.CastToMarketState(pMarketStates.Item(inDate)).GetCurve(curveName)
     
-    myCurve.ShiftParallel shift
+    myCurve.ShiftOnTenor inTenor, shift
 
 End Sub
 
