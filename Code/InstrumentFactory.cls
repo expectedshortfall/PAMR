@@ -111,7 +111,28 @@ Public Sub GetFXOption(ByRef instruments As InstrumentCollection, r As Range)
 End Sub
 
 Public Sub GetFWD_NDF(ByRef instruments As InstrumentCollection, r As Range)
-    'Debug.Print "GetFWD_NDF"
+    
+    With r
+    
+        Dim CCY1 As String: CCY1 = .Offset(0, 4).Value
+        Dim dcName1 As String: dcName1 = IIf(CCY1 = "PLN", "PLX", CCY1)             'discount curve name
+        Dim fcName1 As String: fcName1 = dcName1                                    'forward curve name
+        Dim dcc1 As DayCountConvention: dcc1 = IIf(CCY1 = "PLN", cAct365, cAct360)
+        
+        Dim CCY2 As String: CCY2 = .Offset(0, 5).Value
+        Dim dcName2 As String: dcName2 = IIf(CCY2 = "PLN", "PLX", CCY2)             'discount curve name
+        Dim fcName2 As String: fcName2 = dcName2                                    'forward curve name
+        Dim dcc2 As DayCountConvention: dcc2 = IIf(CCY2 = "PLN", cAct365, cAct360)
+        
+        instruments.Add Factory.CreateFWD_NDF(.Offset(0, 0), .Offset(0, 1), StringToPosition(.Offset(0, 2)), _
+                .Offset(0, 3), StringToCCY(CCY1), StringToCCY(CCY2), .Offset(0, 6), .Offset(0, 7), StringToDelivery(.Offset(0, 8)), _
+                Factory.CreateRateManager(dcName1, fcName1, dcc1), _
+                Factory.CreateRateManager(dcName2, fcName2, dcc2))
+    
+    End With
+        
+    Debug.Print "Loading FWD_NDF has finished successfully"
+
 End Sub
 
 Public Sub GetBond(ByRef instruments As InstrumentCollection, r As Range)

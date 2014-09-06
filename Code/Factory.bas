@@ -6,7 +6,7 @@ Option Explicit
 '   RISK MEASURES FACTORY
 '
 '=============================================================
-' TODO: CREATE IT PROGRAMATICALLY
+' TODO: CREATE IT PROGRAMMATICALLY
 
 Public Function CreateBPV(inCcy As Variant) As mBPV
         
@@ -46,6 +46,7 @@ End Function
 '   INSTRUMENT FACTORY
 '
 '=============================================================
+' TODO: CREATE IT PROGRAMMATICALLY
 Public Function CreateFRA(inTradeDate As Date, inValueDate As Date, inMaturityDate As Date, inNominal As Double, _
                           inCurrency As CCY, inPosition As Position, _
                           inRate As Double, inRecFixingDate As Integer, inRateManager As RateManager) As FRA
@@ -74,6 +75,16 @@ Public Function CreateFXOption(inTradeDate As Date, inMaturityDate As Date, inSe
                                   inTheta, inNominal, inUnderlying, inK, inPremium, _
                                   rm1, rm2
 
+End Function
+
+Public Function CreateFWD_NDF(inTradeDate As Date, inSettlementDate As Date, inPosition As Position, inNominal As Double, _
+                              inCCY1 As CCY, inCCY2 As CCY, inRate As Double, inRecFixingDate As Integer, _
+                              inDelivery As Delivery, inRM1 As RateManager, inRM2 As RateManager) As FWD_NDF
+
+    Set CreateFWD_NDF = New FWD_NDF
+        CreateFWD_NDF.Initialize inTradeDate, inSettlementDate, inPosition, inNominal, _
+                      inCCY1, inCCY2, inRate, inRecFixingDate, inDelivery, _
+                      inRM1, inRM2
 End Function
 
 Public Function CreateIRS_CIRS() As IRS_CIRS

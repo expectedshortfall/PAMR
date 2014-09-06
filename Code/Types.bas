@@ -56,6 +56,11 @@ Public Enum Origin
     FBond
 End Enum
 
+Public Enum Delivery
+    NDF
+    Outright
+End Enum
+
 '=============================================================
 '
 '   TYPE CONVERSION
@@ -93,6 +98,14 @@ Public Function StringToPosition(inString As String) As Position
         StringToPosition = Buy
     Else
         StringToPosition = Sell
+    End If
+End Function
+
+Public Function StringToDelivery(inString As String) As Delivery
+    If inString Like "NDF" Then
+        StringToDelivery = NDF
+    Else
+        StringToDelivery = Outright
     End If
 End Function
 

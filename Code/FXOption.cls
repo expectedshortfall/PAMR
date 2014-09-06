@@ -46,6 +46,7 @@ End Type
 
 Dim pRateManager1 As RateManager
 Dim pRateManager2 As RateManager
+
 '=============================================================
 '
 '   IMPLEMENTING IINSTRUMENT INTERFACE
@@ -110,6 +111,11 @@ End Sub
 Private Sub Class_Initialize()
     pOrigin = Origin.FXOption
     pName = "FXOption"
+End Sub
+
+Private Sub Class_Terminate()
+    Set pRateManager1 = Nothing
+    Set pRateManager2 = Nothing
 End Sub
 
 Private Sub CalculateImpliedVolatility(MSP As MarketStateProvider)
@@ -218,3 +224,4 @@ Private Function getImpliedVolatility(o As sFXOption, marketPrice As Double, Opt
         End If
     Loop
 End Function
+

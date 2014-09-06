@@ -58,6 +58,10 @@ Public Function CreateCompoundFactor() As CompoundFactor
     
 End Function
 
+Public Function GetCompoundingRate(inDate As Date, ByRef M As MarketState) As Double
+    GetCompoundingRate = M.GetCurve(pForwardCurveName).GetRate(inDate)
+End Function
+
 Public Function GetRateForTenor(tenor As Period, ByRef M As MarketState) As Double
     GetRateForTenor = M.GetCurve(pForwardCurveName).GetRateForTenor(tenor)
 End Function

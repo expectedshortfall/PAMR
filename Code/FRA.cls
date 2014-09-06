@@ -56,7 +56,7 @@ Public Function IInstrument_GetCashFlows(ValueDate As Date, ByRef MP As MarketSt
     Dim acc As Double: acc = Exp(0.0001 * (forwardRate - pRate) * pRateManager.GetYearFraction(pValueDate, pMaturityDate)) - 1
     Dim fdf As Double: fdf = pRateManager.GetFDF(pValueDate, pMaturityDate, forwardRate)
     
-    cfAmount = acc * pNominal * fdf * IIf(pPosition = Buy, 1, -1)
+    cfAmount = acc * pNominal * fdf * pPosition
     
     res.AddCashFlow Factory.CreateCashFlow(pOrigin, pCurrency, cfAmount, pValueDate, pRateManager.CreateDiscountFactor)
     
