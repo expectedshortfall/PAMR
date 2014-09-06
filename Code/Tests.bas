@@ -89,7 +89,7 @@ Sub TestMarketState()
     Debug.Assert IM.GetValuationDate = inDate
     
     Dim MSP As MarketStateProvider: Set MSP = IM.GetMarketStateProvider
-    Dim srcMS As MarketState: Set srcMS = MSP.GetMarketStateFromDate(#5/6/2013#)
+    Dim srcMS As MarketState: Set srcMS = MSP.GetMarketStateFromHistory(#5/6/2013#)
     Dim dstMS As MarketState: Set dstMS = srcMS.Clone
     
     dstMS.ShiftMarketParallel 10
@@ -118,19 +118,4 @@ Sub TestBPV()
     Debug.Assert Math.Round(bpvPLN.Calculate(RM), 10) = _
                  Math.Round(12.29145263543, 10)
     
-End Sub
-
-
-Sub TestTypes()
-    Dim r As Range: Set r = Range("inputAreaStart")
-    Dim RM As IRiskMeasure
-    
-    While (Not r.Value = Empty)
-            
-            Set RM = Application.Run("Factory.Create" + r.Value, r.Offset(0, 1).Value)
-            Debug.Print RM.Name
-                        
-            Set r = r.Offset(1, 0)
-    Wend
-
 End Sub

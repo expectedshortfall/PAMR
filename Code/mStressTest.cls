@@ -18,6 +18,12 @@ Implements IRiskMeasure
 Dim pValue As Double
 Dim pName As String
 
+'    - PLN_GOVT -> PLN
+'    - PLN_SWAP -> PLNX, PLN3, PLN6
+'    - EUR -> EUR
+'    - USD -> USD
+
+
 '=============================================================
 '
 '   METHODS
@@ -30,7 +36,7 @@ Dim pName As String
 '
 '=============================================================
 Public Function IRiskMeasure_Calculate(dataSource As IDataSource)
-
+    
 End Function
 
 Public Sub IRiskMeasure_Initialize(param As Variant)

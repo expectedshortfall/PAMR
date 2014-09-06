@@ -120,7 +120,7 @@ End Sub
 
 Private Sub CalculateImpliedVolatility(MSP As MarketStateProvider)
             
-    Dim MS As MarketState: Set MS = MSP.GetMarketStateFromDate(tradeDate)
+    Dim MS As MarketState: Set MS = MSP.GetMarketStateFromHistory(tradeDate)
     Dim o As sFXOption: o = PackDataIntoStructure(MS, 0.1)
     
     sigma = getImpliedVolatility(o, premium / nominal) 'this is not converging

@@ -48,7 +48,7 @@ Public Function IInstrument_GetCashFlows(ValueDate As Date, ByRef MP As MarketSt
     If ValueDate < pFixingDate Then
         forwardRate = pRateManager.GetForwardRate(ValueDate, pValueDate, pMaturityDate, MP.GetCurrentMarketState)
     Else
-        forwardRate = pRateManager.GetRateForTenor(p3M, MP.GetMarketStateFromDate(pFixingDate))
+        forwardRate = pRateManager.GetRateForTenor(p3M, MP.GetMarketStateFromHistory(pFixingDate))
     End If
     
     'We always buy floating rate: i.e. we recieve floating rate, and pay fixed rate

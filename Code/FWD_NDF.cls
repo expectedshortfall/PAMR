@@ -120,7 +120,7 @@ Private Function CalculateForwardFXRate(ValueDate As Date, MSP As MarketStatePro
     If ValueDate < pFixingDate Then
         Set MS = MSP.GetCurrentMarketState
     Else
-        Set MS = MSP.GetMarketStateFromDate(pFixingDate)
+        Set MS = MSP.GetMarketStateFromHistory(pFixingDate)
     End If
     
     a = pRM2.CreateCompoundFactor.Calculate(ValueDate, pSettlementDate, MS)

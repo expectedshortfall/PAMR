@@ -14,8 +14,9 @@ Option Explicit
 '   PRIVATE VARIABLES
 '
 '=============================================================
-Private pMarketStates As Scripting.Dictionary
 Private pCurrentDate As Date
+Private pCurrentMarketState As MarketState
+Private pHistory As Scripting.Dictionary
 
 '=============================================================
 '
@@ -23,28 +24,38 @@ Private pCurrentDate As Date
 '
 '=============================================================
 Public Sub AddMarketState(MS As MarketState)
-    If Not pMarketStates.Exists(MS.SnapshotDate) Then
-        pMarketStates.Add MS.SnapshotDate, MS
+    If MS.SnapshotDate = pCurrentDate Then
+       
+       Set pCurrentMarketState = MS
+    
+    ElseIf MS.SnapshotDate < pCurrentDate Then
+        
+        If Not pHistory.Exists(MS.SnapshotDate) Then
+            pHistory.Add MS.SnapshotDate, MS
+        End If
+    
+    Else
+        Err.Raise vbObject + 514, "MarketStateProvider::AddMarketState", "Opperation not supported: MS.SnapshotDate > pCurrentDate"
     End If
 End Sub
 
-Public Function GetMarketStateFromDate(SnapshotDate As Date) As MarketState
+Public Function GetMarketStateFromHistory(SnapshotDate As Date) As MarketState
     
-    ValidateInDate SnapshotDate, "GetMarketStateFromDate"
+    ValidateInDate SnapshotDate, "GetMarketStateFromHistory"
          
-    Set GetMarketStateFromDate = pMarketStates.Item(SnapshotDate)
+    Set GetMarketStateFromHistory = pHistory.Item(SnapshotDate)
 
 End Function
 
 Public Function GetHistory(length As Integer) As MarketState()
     
-    If (length >= pMarketStates.Count) Then
-        MsgBox "Not enough data, currenty there is " + pMarketStates.Count + " market states"
+    If (length >= pHistory.Count) Then
+        MsgBox "Not enough data, currenty there is " + pHistory.Count + " market states"
         Exit Function
     End If
     
     Dim res() As MarketState: ReDim res(length)
-    Dim keys() As MarketState: keys = pMarketStates.keys
+    Dim keys() As MarketState: keys = pHistory.keys
     Dim v As Variant, i As Integer
     
     For Each v In keys
@@ -61,21 +72,21 @@ End Function
 ' Gets currency rate for current Date
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 Public Function GetCurrentCcyRate(rateName As CCY) As Double
-    GetCurrentCcyRate = GetMarketStateFromDate(pCurrentDate).GetCcyRate(rateName)
+    GetCurrentCcyRate = pCurrentMarketState.GetCcyRate(rateName)
 End Function
 
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 ' Gets curve for current Date
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 Public Function GetCurrentCurve(curveName As String) As Curve
-     Set GetCurrentCurve = GetMarketStateFromDate(pCurrentDate).GetCurve(curveName)
+     Set GetCurrentCurve = pCurrentMarketState.GetCurve(curveName)
 End Function
 
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 ' Gets MarketState object for current Date
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 Public Function GetCurrentMarketState() As MarketState
-    Set GetCurrentMarketState = GetMarketStateFromDate(pCurrentDate)
+    Set GetCurrentMarketState = pCurrentMarketState
 End Function
 
 '=============================================================
@@ -87,34 +98,27 @@ End Function
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 ' Shift Currency Rate by given multiplier
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-Public Sub ShiftFXRate(inCcy As CCY, multiplier As Double, Optional inDate As Date)
-    
-    ValidateInDate inDate, "ShiftFXRate"
-    
-    GetMarketStateFromDate(inDate).ShiftFXRate inCcy, multiplier
+Public Sub ShiftFXRate(inCcy As CCY, multiplier As Double)
+        
+    pCurrentMarketState.ShiftFXRate inCcy, multiplier
     
 End Sub
 
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 ' Shift all curves in parallel
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-Public Sub ShiftMarketParallel(shift As Double, Optional inDate As Date)
-        
-    ValidateInDate inDate, "ShiftMarketParallel"
-    GetMarketStateFromDate(inDate).ShiftMarketParallel shift
+Public Sub ShiftMarketParallel(shift As Double)
+            
+    pCurrentMarketState.ShiftMarketParallel shift
     
 End Sub
 
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 ' Shift single curve in parallel
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-Public Sub ShiftCurveParallel(curveName As String, shift As Double, Optional inDate As Date)
-        
-    ValidateInDate inDate, "ShiftCurveParallel"
+Public Sub ShiftCurveParallel(curveName As String, shift As Double)
     
-    Dim myCurve As Curve: Set myCurve = Types.CastToMarketState(pMarketStates.Item(inDate)).GetCurve(curveName)
-    
-    myCurve.ShiftParallel shift
+    pCurrentMarketState.GetCurve(curveName).ShiftParallel shift
             
 End Sub
 
@@ -123,11 +127,7 @@ End Sub
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 Public Sub ShiftCurveOnTenor(curveName As String, inTenor As Period, shift As Double, Optional inDate As Date)
     
-    ValidateInDate inDate, "ShiftCurveOnTenor"
-    
-    Dim myCurve As Curve: Set myCurve = Types.CastToMarketState(pMarketStates.Item(inDate)).GetCurve(curveName)
-    
-    myCurve.ShiftOnTenor inTenor, shift
+    pCurrentMarketState.GetCurve(curveName).ShiftOnTenor inTenor, shift
 
 End Sub
 
@@ -135,22 +135,27 @@ End Sub
 ' Cloning
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 Public Function Clone() As MarketStateProvider
-    Dim v As Variant
-    Dim myClone As MarketStateProvider: Set myClone = Factory.CreateMarketStateProvider(pCurrentDate)
     
-    For Each v In pMarketStates.keys
-        myClone.AddMarketState Types.CastToMarketState(pMarketStates.Item(v)).Clone
-    Next
-    
-    Set Clone = myClone
+    Set Clone = Factory.CreateMarketStateProvider(pCurrentDate, pCurrentMarketState.Clone, pHistory)
     
 End Function
 
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 ' Initialization, should be used only in factory module
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-Public Sub Initialize(currentDate As Date)
-    pCurrentDate = currentDate
+Public Sub Initialize(inCurrentDate As Date, Optional inMarketState As MarketState, _
+                                             Optional inHistory As Scripting.Dictionary)
+    
+    pCurrentDate = inCurrentDate
+    
+    If Not inMarketState Is Nothing Then
+        Set pCurrentMarketState = inMarketState
+    End If
+    
+    If Not inHistory Is Nothing Then
+        Set pHistory = inHistory
+    End If
+    
 End Sub
 
 '=============================================================
@@ -159,11 +164,11 @@ End Sub
 '
 '=============================================================
 Private Sub Class_Initialize()
-    Set pMarketStates = New Dictionary
+    Set pHistory = New Dictionary
 End Sub
 
 Private Sub Class_Terminate()
-    Set pMarketStates = Nothing
+    Set pHistory = Nothing
 End Sub
 
 Private Function ValidateInDate(ByRef inDate As Date, Optional methodName As String = "ValidateInDate")
@@ -172,7 +177,7 @@ Private Function ValidateInDate(ByRef inDate As Date, Optional methodName As Str
         inDate = pCurrentDate
     End If
     
-    If Not pMarketStates.Exists(inDate) Then
+    If Not pHistory.Exists(inDate) Then
         Err.Raise vbObjectError + 513, "MarketStateProvider::" + methodName, "There is no data for given date: " + CStr(inDate)
     End If
 

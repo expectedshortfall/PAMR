@@ -127,9 +127,12 @@ Public Function CreateMarketSate(inDate As Date) As MarketState
     CreateMarketSate.Initialize inDate:=inDate
 End Function
 
-Public Function CreateMarketStateProvider(inDate As Date) As MarketStateProvider
+Public Function CreateMarketStateProvider(inDate As Date, Optional inMarketState As MarketState, _
+                                          Optional inHistory As Scripting.Dictionary) As MarketStateProvider
+    
     Set CreateMarketStateProvider = New MarketStateProvider
-    CreateMarketStateProvider.Initialize inDate
+    CreateMarketStateProvider.Initialize inDate, inMarketState, inHistory
+
 End Function
 
 Public Function CreateCurve(Name As String, curveDate As Date) As Curve
