@@ -65,6 +65,15 @@ Public Function CreateFXSpot(inTradeDate As Date, inSettlementDate As Date, inPo
                                 inNominal2, inCurrency2, inRateManager2
 End Function
 
+Public Function CreateFXOption(inTradeDate As Date, inMaturityDate As Date, inSettlementDate As Date, inTheta As Integer, _
+                               inNominal As Double, inUnderlying As String, inK As Double, inPremium As Double) As FXOption
+
+    Set CreateFXOption = New FXOption
+        CreateFXOption.Initialize inTradeDate, inMaturityDate, inSettlementDate, _
+                                  inTheta, inNominal, inUnderlying, inK, inPremium
+
+End Function
+
 Public Function CreateIRS_CIRS() As IRS_CIRS
     
     Set CreateIRS_CIRS = New IRS_CIRS

@@ -7,6 +7,8 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
+Option Explicit
+
 Public Function LoadInstruments() As InstrumentCollection
     
     Dim wb As Workbook, ws As Worksheet
@@ -16,8 +18,12 @@ Public Function LoadInstruments() As InstrumentCollection
     
         Set wb = Workbooks.Open(ThisWorkbook.Path + "\deals.xls", True, True)
         For Each ws In wb.Worksheets
+            Dim i As Integer: i = 2
             With ws
-                CallByName Me, ("Get" + .Name), VbMethod, instruments, ws
+                Do Until .Cells(i, 1).Value = ""
+                    CallByName Me, ("Get" + .Name), VbMethod, instruments, .Cells(i, 1)
+                    i = i + 1
+                Loop
             End With
         Next
         
@@ -30,81 +36,85 @@ Public Function LoadInstruments() As InstrumentCollection
 End Function
     
 
-Public Sub GetIRS_CIRS(ByRef instruments As InstrumentCollection, ws As Worksheet)
-    
+Public Sub GetIRS_CIRS(ByRef instruments As InstrumentCollection, r As Range)
+
     instruments.Add Factory.CreateIRS_CIRS()
-        
-    'Debug.Print "GetIRS_CIRS"
 
 End Sub
 
-Public Sub GetFRA(ByRef instruments As InstrumentCollection, ws As Worksheet)
-    
-    Dim i As Integer: i = 2
-    With ws
-        Do Until .Cells(i, 1).Value = ""
+Public Sub GetFRA(ByRef instruments As InstrumentCollection, r As Range)
         
-            Dim discountCurveName As String: discountCurveName = .Cells(i, 5)
-            Dim forwardCurveName As String: forwardCurveName = IIf(.Cells(i, 5) = "PLN", "PL3", .Cells(i, 5))
-            Dim dcc As DayCountConvention: dcc = IIf(.Cells(i, 5) = "PLN", cAct365, cAct360)
-            
-            instruments.Add Factory.CreateFRA(.Cells(i, 1).Value, .Cells(i, 2).Value, _
-                                              .Cells(i, 3).Value, .Cells(i, 4).Value, _
-                                              Types.StringToCCY(.Cells(i, 5).Value), _
-                                              Types.StringToPosition(.Cells(i, 6).Value), _
-                                              .Cells(i, 7), .Cells(i, 8), _
-                                              Factory.CreateRateManager(discountCurveName, forwardCurveName, dcc))
-            i = i + 1
-        Loop
+    With r
+        
+        Dim discountCurveName As String: discountCurveName = .Offset(0, 4)
+        Dim forwardCurveName As String: forwardCurveName = IIf(.Offset(0, 4) = "PLN", "PL3", .Offset(0, 4))
+        Dim dcc As DayCountConvention: dcc = IIf(.Offset(0, 4) = "PLN", cAct365, cAct360)
+        
+        instruments.Add Factory.CreateFRA(.Offset(0, 0).Value, .Offset(0, 1).Value, _
+                                          .Offset(0, 2).Value, .Offset(0, 3).Value, _
+                                          Types.StringToCCY(.Offset(0, 4).Value), _
+                                          Types.StringToPosition(.Offset(0, 5).Value), _
+                                          .Offset(0, 6), .Offset(0, 7), _
+                                          Factory.CreateRateManager(discountCurveName, forwardCurveName, dcc))
+        
     End With
     
-    'Debug.Print "Loading FRAs has finished successfully"
-
+    Debug.Print "Loading FRAs has finished successfully"
+    
 End Sub
 
-Public Sub GetFXSpot(ByRef instruments As InstrumentCollection, ws As Worksheet)
+Public Sub GetFXSpot(ByRef instruments As InstrumentCollection, r As Range)
     
-    Dim i As Integer: i = 2
-    With ws
-        Do Until .Cells(i, 1).Value = ""
-        
-            Dim dcName1 As String: dcName1 = IIf(.Cells(i, 5) = "PLN", "PLX", .Cells(i, 5))     'discount curve name
-            Dim fcName1 As String: fcName1 = IIf(.Cells(i, 5) = "PLN", "PLX", .Cells(i, 5))     'forward curve name
-            Dim dcc1 As DayCountConvention: dcc1 = IIf(.Cells(i, 5) = "PLN", cAct365, cAct360)  'day count convention
-            
-            Dim dcName2 As String: dcName2 = IIf(.Cells(i, 5) = "PLN", "PLX", .Cells(i, 7))
-            Dim fcName2 As String: fcName2 = IIf(.Cells(i, 5) = "PLN", "PLX", .Cells(i, 7))
-            Dim dcc2 As DayCountConvention: dcc2 = IIf(.Cells(i, 7) = "PLN", cAct365, cAct360)
-            
-            instruments.Add Factory.CreateFXSpot(.Cells(i, 1).Value, .Cells(i, 2).Value, StringToPosition(.Cells(i, 3).Value), _
-                    .Cells(i, 4).Value, StringToCCY(.Cells(i, 5).Value), Factory.CreateRateManager(dcName1, fcName1, dcc1), _
-                    .Cells(i, 6).Value, StringToCCY(.Cells(i, 7).Value), Factory.CreateRateManager(dcName2, fcName2, dcc2))
-            
-            i = i + 1
-        Loop
+    With r
+
+        Dim dcName1 As String: dcName1 = IIf(.Offset(0, 4) = "PLN", "PLX", .Offset(0, 4))     'discount curve name
+        Dim fcName1 As String: fcName1 = IIf(.Offset(0, 4) = "PLN", "PLX", .Offset(0, 4))     'forward curve name
+        Dim dcc1 As DayCountConvention: dcc1 = IIf(.Offset(0, 4) = "PLN", cAct365, cAct360)  'day count convention
+
+        Dim dcName2 As String: dcName2 = IIf(.Offset(0, 4) = "PLN", "PLX", .Offset(0, 6))
+        Dim fcName2 As String: fcName2 = IIf(.Offset(0, 4) = "PLN", "PLX", .Offset(0, 6))
+        Dim dcc2 As DayCountConvention: dcc2 = IIf(.Offset(0, 6) = "PLN", cAct365, cAct360)
+
+        instruments.Add Factory.CreateFXSpot(.Offset(0, 0).Value, .Offset(0, 1).Value, StringToPosition(.Offset(0, 2).Value), _
+                .Offset(0, 3).Value, StringToCCY(.Offset(0, 4).Value), Factory.CreateRateManager(dcName1, fcName1, dcc1), _
+                .Offset(0, 5).Value, StringToCCY(.Offset(0, 6).Value), Factory.CreateRateManager(dcName2, fcName2, dcc2))
+
     End With
     
-    'Debug.Print "Loading FXSpots has finished successfully"
+    Debug.Print "Loading FXSpots has finished successfully"
 
 End Sub
 
-Public Sub GetFXSwap(ByRef instruments As InstrumentCollection, ws As Worksheet)
+Public Sub GetFXSwap(ByRef instruments As InstrumentCollection, r As Range)
     'Debug.Print "GetFXSwap"
 End Sub
 
-Public Sub GetFXOption(ByRef instruments As InstrumentCollection, ws As Worksheet)
-    'Debug.Print "GetFXOption"
+Public Sub GetFXOption(ByRef instruments As InstrumentCollection, r As Range)
+
+    With r
+        
+        Dim discountCurveName As String: discountCurveName = .Offset(0, 9)
+        Dim forwardCurveName As String: forwardCurveName = .Offset(0, 9)
+        Dim dcc As DayCountConvention: dcc = IIf(.Offset(0, 9) = "PLN", cAct365, cAct360)
+ 
+        instruments.Add Factory.CreateFXOption(.Offset(0, 0).Value, .Offset(0, 1).Value, .Offset(0, 2).Value, StringToPosition(.Offset(0, 3).Value), _
+                .Offset(0, 4).Value, .Offset(0, 5).Value, .Offset(0, 6).Value, .Offset(0, 8).Value)
+ 
+    End With
+
+    Debug.Print "Loading FXOptions has finished successfully"
+
 End Sub
 
-Public Sub GetFWD_NDF(ByRef instruments As InstrumentCollection, ws As Worksheet)
+Public Sub GetFWD_NDF(ByRef instruments As InstrumentCollection, r As Range)
     'Debug.Print "GetFWD_NDF"
 End Sub
 
-Public Sub GetBond(ByRef instruments As InstrumentCollection, ws As Worksheet)
+Public Sub GetBond(ByRef instruments As InstrumentCollection, r As Range)
     'Debug.Print "GetBond"
 End Sub
 
-Public Sub GetFBond(ByRef instruments As InstrumentCollection, ws As Worksheet)
+Public Sub GetFBond(ByRef instruments As InstrumentCollection, r As Range)
     'Debug.Print "GetFBond"
 End Sub
 

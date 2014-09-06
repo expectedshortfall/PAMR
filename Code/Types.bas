@@ -41,8 +41,8 @@ Public Enum CCY
 End Enum
 
 Public Enum Position
-    Buy
-    Sell
+    Buy = 1
+    Sell = -1
 End Enum
 
 Public Enum Origin

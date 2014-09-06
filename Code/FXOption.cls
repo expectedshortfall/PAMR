@@ -19,13 +19,14 @@ Private pOrigin As Origin
 Private pName As String
 
 Private tradeDate As Date
-Private maturityDate As Date
-Private settlementDate As Date
+Private maturityDate As Date        'tau
+Private settlementDate As Date      'T
+Private nominal As Double
 Private theta As Integer
 Private underlying As String
 Private K As Double
 Private premium As Double
-Private settlementCCy As Currency
+Private Const settlementCCy As Currency = CCY.PLN
 
 Private Const MAX_ITERATIONS As Integer = 100
 '=============================================================
@@ -57,8 +58,17 @@ End Property
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 ' Initialization, should be used only in factory module
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-Public Sub Initialize()
+Public Sub Initialize(inTradeDate As Date, inMaturityDate As Date, inSettlementDate As Date, inTheta As Integer, _
+                      inNominal As Double, inUnderlying As String, inK As Double, inPremium As Double)
  
+    tradeDate = inTradeDate
+    maturityDate = inMaturityDate
+    settlementDate = inSettlementDate
+    nominal = inNominal
+    theta = inTheta
+    underlying = inUnderlying
+    K = inK
+    premium = inPremium
     
 End Sub
 
