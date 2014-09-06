@@ -93,12 +93,16 @@ Public Sub GetFXOption(ByRef instruments As InstrumentCollection, r As Range)
 
     With r
         
-        Dim discountCurveName As String: discountCurveName = .Offset(0, 9)
-        Dim forwardCurveName As String: forwardCurveName = .Offset(0, 9)
-        Dim dcc As DayCountConvention: dcc = IIf(.Offset(0, 9) = "PLN", cAct365, cAct360)
- 
+        Dim CCY1 As String: CCY1 = Left(Trim(.Offset(0, 5).Value), 3)
+        Dim dcc1 As DayCountConvention: dcc1 = IIf(CCY1 = "PLN", cAct365, cAct360)
+        
+        Dim CCY2 As String: CCY2 = Left(Trim(.Offset(0, 9).Value), 3)
+        Dim dcc2 As DayCountConvention: dcc2 = IIf(CCY2 = "PLN", cAct365, cAct360)
+        
         instruments.Add Factory.CreateFXOption(.Offset(0, 0).Value, .Offset(0, 1).Value, .Offset(0, 2).Value, StringToPosition(.Offset(0, 3).Value), _
-                .Offset(0, 4).Value, .Offset(0, 5).Value, .Offset(0, 6).Value, .Offset(0, 8).Value)
+                .Offset(0, 4).Value, StringToCCY(CCY1), .Offset(0, 6).Value, .Offset(0, 8).Value, _
+                 Factory.CreateRateManager(CCY1, CCY1, dcc1), _
+                 Factory.CreateRateManager(CCY2, CCY2, dcc2))
  
     End With
 

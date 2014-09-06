@@ -66,11 +66,13 @@ Public Function CreateFXSpot(inTradeDate As Date, inSettlementDate As Date, inPo
 End Function
 
 Public Function CreateFXOption(inTradeDate As Date, inMaturityDate As Date, inSettlementDate As Date, inTheta As Integer, _
-                               inNominal As Double, inUnderlying As String, inK As Double, inPremium As Double) As FXOption
+                               inNominal As Double, inUnderlying As CCY, inK As Double, inPremium As Double, _
+                               rm1 As RateManager, rm2 As RateManager) As FXOption
 
     Set CreateFXOption = New FXOption
         CreateFXOption.Initialize inTradeDate, inMaturityDate, inSettlementDate, _
-                                  inTheta, inNominal, inUnderlying, inK, inPremium
+                                  inTheta, inNominal, inUnderlying, inK, inPremium, _
+                                  rm1, rm2
 
 End Function
 

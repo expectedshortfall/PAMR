@@ -18,7 +18,24 @@ Private pDcc As DayCountConvention
 Private pDiscountCurveName As String
 Private pForwardCurveName As String
 
+'=============================================================
+'
+'   PROPERTIES
+'
+'=============================================================
+Public Property Get discountCurveName() As String
+    discountCurveName = pDiscountCurveName
+End Property
 
+Public Property Get forwardCurveName() As String
+    forwardCurveName = pForwardCurveName
+End Property
+
+'=============================================================
+'
+'   METHODS
+'
+'=============================================================
 Public Sub Initialize(inDiscountCurveName As String, inForwardCurveName As String, inDcc As DayCountConvention)
     
     pDiscountCurveName = inDiscountCurveName

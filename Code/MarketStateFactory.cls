@@ -144,5 +144,5 @@ End Function
 '
 '=============================================================
 Private Sub Class_Initialize()
-    pMemoryLimit = 3 '250
+    pMemoryLimit = 257
 End Sub
