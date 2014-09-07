@@ -50,7 +50,7 @@ Public Function IRiskMeasure_Calculate(ds As IDataSource)
     
     Call ds.AddDataToCache("VAR", returns)
     
-    pValue = returns(pIndex)
+    pValue = -returns(pIndex)
 
 End Function
 

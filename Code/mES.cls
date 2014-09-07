@@ -48,7 +48,7 @@ Public Function IRiskMeasure_Calculate(ds As IDataSource)
         pValue = pValue + returns(i)
     Next i
     
-    pValue = pValue / pIndex
+    pValue = -pValue / pIndex
 
 End Function
 
