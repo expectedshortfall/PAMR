@@ -150,3 +150,7 @@ End Function
 Public Function CastToMarketState(marketStateObj As Variant) As MarketState
     Set CastToMarketState = marketStateObj
 End Function
+
+Public Function CastToCollection(collectionObj As Variant) As Collection
+    Set CastToCollection = collectionObj
+End Function

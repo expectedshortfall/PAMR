@@ -117,6 +117,16 @@ Public Sub ShiftCurveOnTenor(curveName As String, inTenor As Period, shift As Do
 End Sub
 
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' Shift serveral curves on given tenor
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+Public Sub ShiftCurvesOnTenor(curves As Collection, inTenor As Period, shift As Double, Optional raiseError As Boolean = True)
+    Dim Name As Variant
+    For Each Name In curves
+        Me.ShiftCurveOnTenor CStr(Name), inTenor, shift, raiseError
+    Next
+End Sub
+
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 ' Human readable string representation
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 Public Function ToString() As String

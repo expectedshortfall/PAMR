@@ -143,7 +143,17 @@ End Function
 Public Function ShiftCurveOnTenor(curveName As String, inTenor As Period, shift As Double) As MarketStateProvider
     
     Set ShiftCurveOnTenor = Me.Clone
-        ShiftCurveOnTenor.GetCurrentMarketState.GetCurve(curveName).ShiftOnTenor inTenor, shift
+        ShiftCurveOnTenor.GetCurrentMarketState.ShiftCurveOnTenor curveName, inTenor, shift
+
+End Function
+
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' Shift single rate on a given tenor
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+Public Function ShiftCurvesOnTenor(curveNames As Collection, inTenor As Period, shift As Double) As MarketStateProvider
+    
+    Set ShiftCurvesOnTenor = Me.Clone
+        ShiftCurvesOnTenor.GetCurrentMarketState.ShiftCurvesOnTenor curveNames, inTenor, shift, False
 
 End Function
 
