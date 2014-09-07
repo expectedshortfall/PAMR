@@ -43,10 +43,6 @@ Public Sub IRiskMeasure_Initialize(param As Variant)
     pName = pName + param
 End Sub
 
-Public Sub IRiskMeasure_RegisterValuesForReuse(dataSource As IDataSource)
-
-End Sub
-
 Public Property Get IRiskMeasure_Name() As String
     IRiskMeasure_Name = pName
 End Property

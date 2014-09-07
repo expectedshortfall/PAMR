@@ -20,10 +20,6 @@ End Function
 Public Sub Initialize(param As Variant)
 End Sub
 
-Public Sub RegisterValuesForReuse(dataSource As IDataSource)
-
-End Sub
-
 Public Property Get Name() As String
 End Property
 

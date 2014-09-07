@@ -45,6 +45,12 @@ Public Function IRiskMeasure_Calculate(ds As IDataSource)
     For i = LBound(history) To (UBound(history) - 1)
         returns(i) = WorksheetFunction.SumProduct(pSensitivities, CalculateRiskFactorChanges(history(i), history(i + 1)))
     Next i
+    
+    Call ArrayFunctions.QuickSort(returns, LBound(returns), UBound(returns))
+    
+    Call ds.AddDataToCache("VAR", returns)
+    
+    pValue = returns(pIndex)
 
 End Function
 
@@ -57,10 +63,6 @@ Public Sub IRiskMeasure_Initialize(param As Variant)
     pAlpha = param
     pIndex = WorksheetFunction.Ceiling(pAlpha * pHistoryLength, 1)
     
-End Sub
-
-Public Sub IRiskMeasure_RegisterValuesForReuse(dataSource As IDataSource)
-
 End Sub
 
 Public Property Get IRiskMeasure_Name() As String
@@ -133,7 +135,7 @@ Private Sub CalculateSensitivities(inValueDate As Date, p As Portfolio, MSP As M
     For Each curveName In pCurveNames
         For Each tenor In pTenors
             pSensitivities(i) = p.GetNPV(inValueDate, MSP.ShiftCurveOnTenor(CStr(curveName), CLng(tenor), 1)) - v
-            i = 1 + 1
+            i = i + 1
         Next tenor
     Next curveName
 
@@ -141,7 +143,7 @@ End Sub
 
 Private Function CalculateRiskFactorChanges(ms_next As MarketState, ms_prev As MarketState) As Double()
     
-    Dim res() As Double:  ReDim pSensitivities(1 To UBound(pSensitivities))
+    Dim res() As Double:  ReDim res(1 To UBound(pSensitivities))
     Dim curveName As Variant, tenor As Variant, c As Variant
     Dim i As Integer: i = 1
     
