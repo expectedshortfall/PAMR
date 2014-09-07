@@ -61,7 +61,7 @@ Public Sub IRiskMeasure_Initialize(param As Variant)
     End If
     
     pAlpha = param
-    pIndex = WorksheetFunction.Ceiling(pAlpha * pHistoryLength, 1)
+    pIndex = WorksheetFunction.Ceiling((1 - pAlpha) * pHistoryLength, 1)
     
 End Sub
 

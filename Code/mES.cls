@@ -8,6 +8,7 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
+Option Base 1
 Implements IRiskMeasure
 
 '=============================================================
@@ -32,7 +33,22 @@ Const pHistoryLength As Integer = 250
 '   IMPLEMENTING IRiskMeasure INTERFACE
 '
 '=============================================================
-Public Function IRiskMeasure_Calculate(dataSource As IDataSource)
+Public Function IRiskMeasure_Calculate(ds As IDataSource)
+    
+    Dim returns() As Double
+    
+    If VarType(ds.GetDataFromCache("VAR")) = vbNull Then
+        Err.Raise vbObject + 1, "ES::Calculate", "Calculate VaR first!"
+    End If
+    
+    returns = ds.GetDataFromCache("VAR")
+    
+    Dim i As Integer
+    For i = LBound(returns) To pIndex
+        pValue = pValue + returns(i)
+    Next i
+    
+    pValue = pValue / pIndex
 
 End Function
 
@@ -43,7 +59,7 @@ Public Sub IRiskMeasure_Initialize(param As Variant)
     End If
     
     pAlpha = param
-    pIndex = WorksheetFunction.Ceiling(pAlpha * pHistoryLength, 1)
+    pIndex = WorksheetFunction.Ceiling((1 - pAlpha) * pHistoryLength, 1)
     
 End Sub
 
