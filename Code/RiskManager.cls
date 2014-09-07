@@ -20,7 +20,7 @@ Private pMSP As MarketStateProvider
 Private pMSP_BPV As MarketStateProvider
 Private pVD As Date
 Private pRiskMeasureCollection As IRiskMeasureCollection
-
+Private pCache As Scripting.Dictionary
 
 '=============================================================
 '
@@ -40,10 +40,24 @@ Public Property Get IDataSource_MarketStateProvider() As MarketStateProvider
 
 End Property
 
+Public Function IDataSource_GetDataFromCache(key As String) As Variant
+    
+    If pCache.Exists(key) Then
+        If VarType(pCache.Item(key)) = vbObject Then
+            Set IDataSource_GetDataFromCache = pCache.Item(key)
+        Else
+            IDataSource_GetDataFromCache = pCache.Item(key)
+        End If
+    Else
+        IDataSource_GetDataFromCache = Null
+    End If
+
+End Function
+
 Public Property Get IDataSource_MarketStateProviderShiftedInParallelBy1Bp() As MarketStateProvider
     
     If pMSP_BPV Is Nothing Then
-        Set pMSP_BPV = Me.IDataSource_MarketStateProvider.Clone(): pMSP_BPV.ShiftMarketParallel 1
+        Set pMSP_BPV = pMSP.ShiftMarketParallel(1)
     End If
     
     Set IDataSource_MarketStateProviderShiftedInParallelBy1Bp = pMSP_BPV
@@ -101,6 +115,7 @@ End Sub
 '=============================================================
 Private Sub Class_Initialize()
     Set pRiskMeasureCollection = New IRiskMeasureCollection
+    Set pCache = New Scripting.Dictionary
 End Sub
 
 
@@ -109,4 +124,5 @@ Private Sub Class_Terminate()
     Set pMSP = Nothing
     Set pRiskMeasureCollection = Nothing
     Set pMSP_BPV = Nothing
+    Set pCache = Nothing
 End Sub

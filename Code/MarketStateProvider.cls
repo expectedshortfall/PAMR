@@ -8,7 +8,7 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
-
+Option Base 1
 '=============================================================
 '
 '   PRIVATE VARIABLES
@@ -54,14 +54,16 @@ Public Function GetHistory(length As Integer) As MarketState()
         Exit Function
     End If
     
-    Dim res() As MarketState: ReDim res(length)
-    Dim keys() As MarketState: keys = pHistory.keys
-    Dim v As Variant, i As Integer
+    Dim res() As MarketState: ReDim res(1 To length)
+    Dim K As Variant, i As Integer: i = 2
     
-    For Each v In keys
-        If i > 0 And i <= length Then
-            res(i - 1) = keys(i)
+    Set res(1) = pCurrentMarketState
+    
+    For Each K In pHistory.keys
+        If i <= length Then
+            Set res(i) = pHistory.Item(K)
         End If
+        i = i + 1
     Next
     
     GetHistory = res
@@ -91,45 +93,49 @@ End Function
 
 '=============================================================
 '
-'   MARKET SHIFTS
+'   MARKET SHIFTS FOR RISK MEASURES
 '
 '=============================================================
 
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-' Shift Currency Rate by given multiplier
+' Return clone with Shift Currency Rate by given multiplier
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-Public Sub ShiftFXRate(inCcy As CCY, multiplier As Double)
+Public Function ShiftFXRate(inCcy As CCY, multiplier As Double) As MarketStateProvider
         
-    pCurrentMarketState.ShiftFXRate inCcy, multiplier
+    Set ShiftFXRate = Me.Clone
+        ShiftFXRate.GetCurrentMarketState.ShiftFXRate inCcy, multiplier
     
-End Sub
+End Function
 
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 ' Shift all curves in parallel
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-Public Sub ShiftMarketParallel(shift As Double)
+Public Function ShiftMarketParallel(shift As Double) As MarketStateProvider
             
-    pCurrentMarketState.ShiftMarketParallel shift
+    Set ShiftMarketParallel = Me.Clone
+        ShiftMarketParallel.GetCurrentMarketState.ShiftMarketParallel shift
     
-End Sub
+End Function
 
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 ' Shift single curve in parallel
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-Public Sub ShiftCurveParallel(curveName As String, shift As Double)
+Public Function ShiftCurveParallel(curveName As String, shift As Double) As MarketStateProvider
     
-    pCurrentMarketState.GetCurve(curveName).ShiftParallel shift
+    Set ShiftCurveParallel = Me.Clone
+        ShiftCurveParallel.GetCurrentMarketState.GetCurve(curveName).ShiftParallel shift
             
-End Sub
+End Function
 
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 ' Shift single rate on a given tenor
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-Public Sub ShiftCurveOnTenor(curveName As String, inTenor As Period, shift As Double, Optional inDate As Date)
+Public Function ShiftCurveOnTenor(curveName As String, inTenor As Period, shift As Double) As MarketStateProvider
     
-    pCurrentMarketState.GetCurve(curveName).ShiftOnTenor inTenor, shift
+    Set ShiftCurveOnTenor = Me.Clone
+        ShiftCurveOnTenor.GetCurrentMarketState.GetCurve(curveName).ShiftOnTenor inTenor, shift
 
-End Sub
+End Function
 
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 ' Cloning

@@ -20,6 +20,9 @@ End Property
 Public Property Get MarketStateProvider() As MarketStateProvider
 End Property
 
+Public Function GetDataFromCache(riskMeasureName As String) As Variant
+End Function
+
 Public Property Get MarketStateProviderShiftedInParallelBy1Bp() As MarketStateProvider
 End Property
 

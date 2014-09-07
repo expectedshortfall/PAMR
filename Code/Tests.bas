@@ -119,3 +119,51 @@ Sub TestBPV()
                  Math.Round(12.29145263543, 10)
     
 End Sub
+
+Sub TestDictionary()
+    Dim a As Scripting.Dictionary: Set a = New Scripting.Dictionary
+    Dim b() As Double, i As Integer
+    Dim arr() As Double: arr = FakeArr(2)
+    Dim c As Curve
+    Dim D As Object
+        
+    a.Add "bpv", New Curve
+    a.Add "VAR", arr
+        
+    Debug.Print VarType(GetFromDict(a, "VAR")); " "; vbArray; " "; vbVariant
+    Debug.Print VarType(GetFromDict(a, "ES")); " "; vbBoolean
+    
+    b = IIf(VarType(GetFromDict(a, "VAR")) = vbNull, FakeArr(3), GetFromDict(a, "VAR"))
+    Set D = IIf(VarType(GetFromDict(a, "ES")) = vbNull, New Curve, GetFromDict(a, "VAR"))
+
+    For i = LBound(b) To UBound(b)
+        Debug.Print b(i)
+    Next i
+
+'    Set c = GetFromDict(a, "bpv")
+
+End Sub
+
+Function FakeArr(length As Integer) As Double()
+    Dim arr() As Double: ReDim arr(0 To length)
+    Dim i As Integer
+    
+    For i = LBound(arr) To UBound(arr)
+        arr(i) = i
+    Next i
+    
+    FakeArr = arr
+    
+End Function
+
+Function GetFromDict(ByRef dict As Scripting.Dictionary, key As String) As Variant
+    If dict.Exists(key) Then
+        If VarType(dict.Item(key)) = vbObject Then
+            Set GetFromDict = dict.Item(key)
+        Else
+            GetFromDict = dict.Item(key)
+        End If
+    Else
+        GetFromDict = Null
+    End If
+End Function

@@ -36,11 +36,12 @@ Dim pName As String
 '
 '=============================================================
 Public Function IRiskMeasure_Calculate(dataSource As IDataSource)
-    
 End Function
 
 Public Sub IRiskMeasure_Initialize(param As Variant)
+End Sub
 
+Public Sub IRiskMeasure_RegisterValuesForReuse(dataSource As IDataSource)
 End Sub
 
 Public Property Get IRiskMeasure_Name() As String
