@@ -128,6 +128,16 @@ Public Function ShiftCurveParallel(curveName As String, shift As Double) As Mark
 End Function
 
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' Shift all curves in on a given tenor
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+Public Function ShiftMarketOnTenor(inTenor As Period, shift As Double) As MarketStateProvider
+            
+    Set ShiftMarketOnTenor = Me.Clone
+        ShiftMarketOnTenor.GetCurrentMarketState.ShiftMarketOnTenor inTenor, shift
+    
+End Function
+
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 ' Shift single rate on a given tenor
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 Public Function ShiftCurveOnTenor(curveName As String, inTenor As Period, shift As Double) As MarketStateProvider

@@ -92,6 +92,18 @@ Public Sub ShiftCurveParallel(curveName As String, shift As Double)
 End Sub
 
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' Shift all curves on a given tenor
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+Public Sub ShiftMarketOnTenor(inTenor As Period, shift As Double)
+    Dim v As Variant
+    
+    For Each v In pCurves.keys
+        Me.ShiftCurveOnTenor CStr(v), inTenor, shift
+    Next
+    
+End Sub
+
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 ' Shift single rate on a given tenor
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 Public Sub ShiftCurveOnTenor(curveName As String, inTenor As Period, shift As Double)

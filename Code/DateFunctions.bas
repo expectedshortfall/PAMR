@@ -208,6 +208,7 @@ Public Function GetFixingDate(ValueDate As Date, shift As Integer)
 
 End Function
 
+' TODO: Fix convention bug
 Public Function CurveTenorDate(inDate As Date, inPeriod As Period)
     
     Dim tmpDate As Date: tmpDate = DateMove(inDate, pSN, Following)
