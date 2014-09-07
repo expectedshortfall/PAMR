@@ -98,7 +98,7 @@ Public Sub ShiftMarketOnTenor(inTenor As Period, shift As Double)
     Dim v As Variant
     
     For Each v In pCurves.keys
-        Me.ShiftCurveOnTenor CStr(v), inTenor, shift
+        Me.ShiftCurveOnTenor CStr(v), inTenor, shift, False
     Next
     
 End Sub
@@ -106,12 +106,12 @@ End Sub
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 ' Shift single rate on a given tenor
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-Public Sub ShiftCurveOnTenor(curveName As String, inTenor As Period, shift As Double)
+Public Sub ShiftCurveOnTenor(curveName As String, inTenor As Period, shift As Double, Optional raiseError As Boolean = True)
     
     If Not pCurves.Exists(curveName) Then
-        Err.Raise vbObjectError + 513, "MarketState::ShiftCurveOnTenor", "Curve: " + curveName + " is not present in market"
+            Err.Raise vbObjectError + 513, "MarketState::ShiftCurveOnTenor", "Curve: " + curveName + " is not present in market"
     Else
-        Types.CastToCurve(pCurves.Item(curveName)).ShiftOnTenor inTenor, shift
+        Types.CastToCurve(pCurves.Item(curveName)).ShiftOnTenor inTenor, shift, raiseError
     End If
 
 End Sub

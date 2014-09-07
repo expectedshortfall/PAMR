@@ -88,11 +88,13 @@ End Sub
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 ' Shift single rate on a given tenor
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-Public Sub ShiftOnTenor(inTenor As Period, shift As Double)
+Public Sub ShiftOnTenor(inTenor As Period, shift As Double, Optional raiseError As Boolean = True)
     Dim tenorDate As Date: tenorDate = CurveTenorDate(pCurveDate, inTenor)
 
     If Not pRates.Exists(tenorDate) Then
-        Err.Raise vbObjectError + 513, "Curve::ShiftOnTenor", "Tenor not present in curve: " + pName
+        If raiseError Then
+            Err.Raise vbObjectError + 513, "Curve::ShiftOnTenor", "Tenor not present in curve: " + pName
+        End If
     Else
        pRates.Item(tenorDate) = pRates.Item(tenorDate) + shift
     End If

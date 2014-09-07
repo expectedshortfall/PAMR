@@ -53,6 +53,8 @@ Public Function IRiskMeasure_Calculate(ds As IDataSource)
        yf = YearFrac(ds.ValueDate, DateMove(ds.ValueDate, i - 1, Following), cAct365)
        Rot = Rot + yf * pSensitivities(i) * w(pSensitivities(i), L, S)
     Next i
+    
+    pValue = Rot
 
 End Function
 
@@ -119,7 +121,20 @@ Private Sub CalculateSensitivities(inValueDate As Date, p As Portfolio, MSP As M
 End Sub
 
 Private Function w(x As Double, L As Double, S As Double) As Double
-    w = WorksheetFunction.Min(L, S) * IIf(x > 0, 1 / L, 1 / S)
+    Dim M As Double: M = 0
+    
+    If x > 0 Then
+        If Not L = 0 Then
+            M = 1 / L
+        End If
+    Else
+        If Not S = 0 Then
+            M = 1 / S
+        End If
+    End If
+    
+    w = WorksheetFunction.Min(L, S) * M
+
 End Function
 
  
