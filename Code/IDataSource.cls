@@ -23,8 +23,8 @@ End Property
 Public Function GetDataFromCache(riskMeasureName As String) As Variant
 End Function
 
-Public Property Get MarketStateProviderShiftedInParallelBy1Bp() As MarketStateProvider
-End Property
+Public Sub AddDataToCache(riskMeasureName As String, data As Variant)
+End Sub
 
 Public Property Get Portfolio() As Portfolio
 End Property

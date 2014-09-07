@@ -33,7 +33,15 @@ Public Function IRiskMeasure_Calculate(ds As IDataSource)
     
     Dim MSP As MarketStateProvider: Set MSP = ds.MarketStateProvider
     Dim p As Portfolio: Set p = ds.Portfolio
-    Dim shiftedMSP As MarketStateProvider: Set shiftedMSP = ds.MarketStateProviderShiftedInParallelBy1Bp
+    
+    Dim shiftedMSP As MarketStateProvider
+    
+    If VarType(ds.GetDataFromCache("BPV")) = vbNull Then
+        Set shiftedMSP = MSP.ShiftMarketParallel(1)
+        ds.AddDataToCache "BPV", shiftedMSP
+    Else
+        Set shiftedMSP = ds.GetDataFromCache("BPV")
+    End If
     
     Dim currentValue As Double: currentValue = p.GetNPVByCCY(ds.ValueDate, MSP, pCCY)
     Dim shiftedValue As Double: shiftedValue = p.GetNPVByCCY(ds.ValueDate, shiftedMSP, pCCY)

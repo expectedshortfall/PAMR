@@ -124,15 +124,13 @@ Sub TestDictionary()
     Dim a As Scripting.Dictionary: Set a = New Scripting.Dictionary
     Dim b() As Double, i As Integer
     Dim arr() As Double: arr = FakeArr(2)
-    Dim c As Curve
+    Dim c As Curve, cBase As Curve
     Dim D As Object
         
-    a.Add "bpv", New Curve
+    Set cBase = Factory.CreateCurve("ALA", Now())
+    Call AddToDict(a, "bpv", cBase)
     a.Add "VAR", arr
-        
-    Debug.Print VarType(GetFromDict(a, "VAR")); " "; vbArray; " "; vbVariant
-    Debug.Print VarType(GetFromDict(a, "ES")); " "; vbBoolean
-    
+            
     b = IIf(VarType(GetFromDict(a, "VAR")) = vbNull, FakeArr(3), GetFromDict(a, "VAR"))
     Set D = IIf(VarType(GetFromDict(a, "ES")) = vbNull, New Curve, GetFromDict(a, "VAR"))
 
@@ -140,8 +138,11 @@ Sub TestDictionary()
         Debug.Print b(i)
     Next i
 
-'    Set c = GetFromDict(a, "bpv")
-
+    Set c = GetFromDict(a, "bpv")
+    
+    c.AddRate p10Y, 0.1
+    Debug.Print cBase.ToString
+    
 End Sub
 
 Function FakeArr(length As Integer) As Double()
@@ -167,3 +168,7 @@ Function GetFromDict(ByRef dict As Scripting.Dictionary, key As String) As Varia
         GetFromDict = Null
     End If
 End Function
+
+Sub AddToDict(ByRef dict As Scripting.Dictionary, key As String, obj As Variant)
+    dict.Add key, obj
+End Sub

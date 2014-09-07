@@ -54,15 +54,11 @@ Public Function IDataSource_GetDataFromCache(key As String) As Variant
 
 End Function
 
-Public Property Get IDataSource_MarketStateProviderShiftedInParallelBy1Bp() As MarketStateProvider
-    
-    If pMSP_BPV Is Nothing Then
-        Set pMSP_BPV = pMSP.ShiftMarketParallel(1)
+Public Sub IDataSource_AddDataToCache(key As String, data As Variant)
+    If Not pCache.Exists(key) Then
+        pCache.Add key, data
     End If
-    
-    Set IDataSource_MarketStateProviderShiftedInParallelBy1Bp = pMSP_BPV
-    
-End Property
+End Sub
 
 Public Property Get IDataSource_Portfolio() As Portfolio
     
